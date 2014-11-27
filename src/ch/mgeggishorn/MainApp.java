@@ -3,7 +3,9 @@ package ch.mgeggishorn;
 import java.io.IOException;
 
 
+
 import ch.mgeggishorn.controller.RootLayoutController;
+import ch.mgeggishorn.controller.SpielerController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -14,8 +16,10 @@ public class MainApp extends Application {
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
+	
 
 	public MainApp() {
+		
 
 	}
 
@@ -29,6 +33,8 @@ public class MainApp extends Application {
 		// Image("file:resources/images/address_book_32.png"));
 
 		initRootLayout();
+		SpielerController controller = new SpielerController();
+		controller.getAllSpieler();
 	}
 
 	/**

@@ -1,17 +1,15 @@
 package ch.mgeggishorn.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.StringProperty;
 
 public class SpielerModel {
-	private StringProperty name;
-	private StringProperty vorname;
-	private StringProperty strasse;
-	private IntegerProperty plz;
-	private StringProperty ort;
+	private String name;
+	private String vorname;
+	private String strasse;
+	private int plz;
+	private String ort;
 	
-	public SpielerModel(StringProperty name, StringProperty vorname,
-			StringProperty strasse, IntegerProperty plz, StringProperty ort) {
+	public SpielerModel(String name, String vorname,
+			String strasse, int plz, String ort) {
 
 		this.name = name;
 		this.vorname = vorname;
@@ -20,46 +18,45 @@ public class SpielerModel {
 		this.ort = ort;
 	}
 
-	public StringProperty getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(StringProperty name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public StringProperty getVorname() {
+	public String getVorname() {
 		return vorname;
 	}
 
-	public void setVorname(StringProperty vorname) {
+	public void setVorname(String vorname) {
 		this.vorname = vorname;
 	}
 
-	public StringProperty getStrasse() {
+	public String getStrasse() {
 		return strasse;
 	}
 
-	public void setStrasse(StringProperty strasse) {
+	public void setStrasse(String strasse) {
 		this.strasse = strasse;
 	}
 
-	public IntegerProperty getPlz() {
+	public int getPlz() {
 		return plz;
 	}
 
-	public void setPlz(IntegerProperty plz) {
+	public void setPlz(int plz) {
 		this.plz = plz;
 	}
 
-	public StringProperty getOrt() {
+	public String getOrt() {
 		return ort;
 	}
 
-	public void setOrt(StringProperty ort) {
+	public void setOrt(String ort) {
 		this.ort = ort;
 	}
-	
-	
+
 	
 }
