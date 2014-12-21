@@ -40,7 +40,7 @@
                                           <TableColumn fx:id="colOrt" prefWidth="102.0" text="Ort" />
                                       </columns>
                                     </TableView>
-                                    <TextField fx:id="txtSuche" layoutX="14.0" layoutY="14.0" text="Suche" />
+                                    <TextField fx:id="txtSuche" layoutX="14.0" layoutY="14.0" promptText="Suche" />
                                     <Button layoutX="177.0" layoutY="14.0" mnemonicParsing="false" onAction="#neuSpieler" text="Neu" />
                                     <Button layoutX="227.0" layoutY="14.0" mnemonicParsing="false" onAction="#ladeDaten" text="Lade Daten" />
                                  </children>
@@ -53,20 +53,20 @@
                                        </font>
                                     </Label>
                                     <Label layoutX="23.0" layoutY="111.0" text="Name" />
-                                    <TextField fx:id="txtName" editable="false" layoutX="115.0" layoutY="107.0" />
-                                    <TextField fx:id="txtVorname" editable="false" layoutX="115.0" layoutY="135.0" />
+                                    <TextField fx:id="txtName" disable="true" layoutX="115.0" layoutY="107.0" />
+                                    <TextField fx:id="txtVorname" disable="true" layoutX="115.0" layoutY="135.0" />
                                     <Label layoutX="23.0" layoutY="139.0" text="Vorname" />
-                                    <TextField fx:id="txtStrasse" editable="false" layoutX="115.0" layoutY="163.0" />
+                                    <TextField fx:id="txtStrasse" disable="true" layoutX="115.0" layoutY="163.0" />
                                     <Label layoutX="23.0" layoutY="167.0" text="Strasse" />
-                                    <TextField fx:id="txtPlz" editable="false" layoutX="115.0" layoutY="191.0" />
+                                    <TextField fx:id="txtPlz" disable="true" layoutX="115.0" layoutY="191.0" />
                                     <Label layoutX="23.0" layoutY="195.0" text="PLZ" />
-                                    <TextField fx:id="txtOrt" editable="false" layoutX="115.0" layoutY="219.0" />
+                                    <TextField fx:id="txtOrt" disable="true" layoutX="115.0" layoutY="219.0" />
                                     <Label layoutX="23.0" layoutY="223.0" text="Ort" />
                                     <Button layoutX="22.0" layoutY="258.0" mnemonicParsing="false" onAction="#bearbeiten" text="Bearbeiten" />
                                     <Button layoutX="178.0" layoutY="258.0" mnemonicParsing="false" onAction="#loeschen" text="Löschen" />
                                     <Button layoutX="102.0" layoutY="258.0" mnemonicParsing="false" onAction="#speichern" text="Speichern" />
                                     <Label layoutX="23.0" layoutY="83.0" text="ID" />
-                                    <TextField fx:id="txtId" editable="false" layoutX="115.0" layoutY="79.0" />
+                                    <TextField fx:id="txtId" disable="true" editable="false" layoutX="115.0" layoutY="79.0" />
                                  </children>
                               </AnchorPane>
                           </items>
