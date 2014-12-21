@@ -1,61 +1,78 @@
 package ch.mgeggishorn.model;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 
 public class SpielerModel {
-	private String name;
-	private String vorname;
-	private String strasse;
-	private int plz;
-	private String ort;
+	private SimpleIntegerProperty id;
+	private SimpleStringProperty name;
+	private SimpleStringProperty vorname;
+	private SimpleStringProperty strasse;
+	private SimpleIntegerProperty plz;
+	private SimpleStringProperty ort;
 	
-	public SpielerModel(String name, String vorname,
+	public SpielerModel(int id, String name, String vorname,
 			String strasse, int plz, String ort) {
-
-		this.name = name;
-		this.vorname = vorname;
-		this.strasse = strasse;
-		this.plz = plz;
-		this.ort = ort;
+		this.id= new SimpleIntegerProperty(id);
+		this.name = new SimpleStringProperty(name);
+		this.vorname = new SimpleStringProperty(vorname);
+		this.strasse = new SimpleStringProperty(strasse);
+		this.plz = new SimpleIntegerProperty(plz);
+		this.ort = new SimpleStringProperty(ort);
+	}
+	public SpielerModel(int id, String name, String vorname,String ort) {
+		this.id= new SimpleIntegerProperty(id);
+		this.name = new SimpleStringProperty(name);
+		this.vorname = new SimpleStringProperty(vorname);
+		this.ort = new SimpleStringProperty(ort);
 	}
 
+	public int getId() {
+		return id.get();
+	}
+
+	public void setId(int id) {
+		this.id.set(id);
+	}
 	public String getName() {
-		return name;
+		return name.get();
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name.set(name);
 	}
 
 	public String getVorname() {
-		return vorname;
+		return vorname.get();
 	}
 
 	public void setVorname(String vorname) {
-		this.vorname = vorname;
+		this.vorname.set(vorname);
 	}
 
 	public String getStrasse() {
-		return strasse;
+		return strasse.get();
 	}
 
 	public void setStrasse(String strasse) {
-		this.strasse = strasse;
+		this.strasse.set(strasse);
 	}
 
 	public int getPlz() {
-		return plz;
+		return plz.get();
 	}
 
 	public void setPlz(int plz) {
-		this.plz = plz;
+		this.plz.set(plz);
 	}
 
 	public String getOrt() {
-		return ort;
+		return ort.get();
 	}
 
 	public void setOrt(String ort) {
-		this.ort = ort;
+		this.ort.set(ort);
 	}
 
 	

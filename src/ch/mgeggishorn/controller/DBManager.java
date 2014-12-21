@@ -3,46 +3,73 @@ package ch.mgeggishorn.controller;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
-import javax.swing.text.html.HTMLDocument.Iterator;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.cell.PropertyValueFactory;
 import ch.mgeggishorn.model.SpielerModel;
 
 public class DBManager {
 	private static Connection con;
-	private static Statement stat;
-
-	private ObservableList<SpielerModel> spielerData;
-
-	public ObservableList<SpielerModel> getAllSpieler() {
+	List<SpielerModel> spielerData = new ArrayList<>();
+	List<SpielerModel> spielerDataOf = new ArrayList<>();
+	
+	
+	
+	
+	
+	
+	public List<SpielerModel> getDetailOfSpieler(SpielerModel spieler) {
+		
 		try {
+			spielerDataOf.clear();
 			con = DBConnector.getConnected();
-			stat = con.createStatement();
-			spielerData = FXCollections.observableArrayList();
-			ResultSet rs = con.createStatement().executeQuery(
-					"select * from spieler");
-			while (rs.next()) {
-				spielerData.add(new SpielerModel(rs.getString("name"), rs
-						.getString("vorname"), rs.getString("strasse"), rs
-						.getInt("plz"), rs.getString("ort")));
-			}
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs= s.executeQuery("select * from spieler where id='" + spieler.getId() + "'");
 			
+			if (rs != null) {
+				while (rs.next()) {
+					int id = rs.getInt("id");
+					String name = rs.getString("name");
+					String vorname = rs.getString("vorname");
+					String strasse = rs.getString("strasse");
+					int plz = rs.getInt("plz");
+					String ort = rs.getString("ort");
+					spielerDataOf.add(new SpielerModel(id,name, vorname,strasse, plz, ort));
+				}
 			
-			for (int i = 0; i < spielerData.size(); i++) {
-				System.out.println(spielerData.get(i).getName()+spielerData.get(i).getVorname()+spielerData.get(i).getPlz()+spielerData.get(i).getStrasse()+spielerData.get(i).getOrt());
 			}
-
+			/*for (SpielerModel spielerModel : spielerDataOf) {
+				System.out.println(spielerModel.getId());
+			}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
 		}
+		return spielerDataOf;
+	}
+	public List<SpielerModel> getAllSpielerOverView() {
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs= s.executeQuery("select id, name, vorname, ort from spieler");
+			if (rs != null) {
+				while (rs.next()) {
+					int id = rs.getInt("id");
+					String name = rs.getString("name");
+					String vorname = rs.getString("vorname");
+					String ort = rs.getString("ort");
+					spielerData.add(new SpielerModel(id, name, vorname, ort));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return spielerData;
+	}
 
-		return null;
-
-	};
+	
 }

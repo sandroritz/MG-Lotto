@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.view.RootLayoutController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Datei">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Hilfe">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Info" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Spieler verwalten">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.43693107932379716" layoutX="14.0" layoutY="14.0" minHeight="518.0" minWidth="771.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <TableView fx:id="tblOverview" layoutX="14.0" layoutY="56.0" prefHeight="436.0" prefWidth="304.0">
+                                      <columns>
+                                        <TableColumn fx:id="colName" prefWidth="107.0" text="Name" />
+                                        <TableColumn fx:id="colVorname" prefWidth="94.0" text="Vorname" />
+                                          <TableColumn fx:id="colOrt" prefWidth="102.0" text="Ort" />
+                                      </columns>
+                                    </TableView>
+                                    <TextField fx:id="txtSuche" layoutX="14.0" layoutY="14.0" text="Suche" />
+                                    <Button layoutX="177.0" layoutY="14.0" mnemonicParsing="false" onAction="#neuSpieler" text="Neu" />
+                                    <Button layoutX="227.0" layoutY="14.0" mnemonicParsing="false" onAction="#ladeDaten" text="Lade Daten" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="14.0" text="Detail">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="23.0" layoutY="111.0" text="Name" />
+                                    <TextField fx:id="txtName" editable="false" layoutX="115.0" layoutY="107.0" />
+                                    <TextField fx:id="txtVorname" editable="false" layoutX="115.0" layoutY="135.0" />
+                                    <Label layoutX="23.0" layoutY="139.0" text="Vorname" />
+                                    <TextField fx:id="txtStrasse" editable="false" layoutX="115.0" layoutY="163.0" />
+                                    <Label layoutX="23.0" layoutY="167.0" text="Strasse" />
+                                    <TextField fx:id="txtPlz" editable="false" layoutX="115.0" layoutY="191.0" />
+                                    <Label layoutX="23.0" layoutY="195.0" text="PLZ" />
+                                    <TextField fx:id="txtOrt" editable="false" layoutX="115.0" layoutY="219.0" />
+                                    <Label layoutX="23.0" layoutY="223.0" text="Ort" />
+                                    <Button layoutX="22.0" layoutY="258.0" mnemonicParsing="false" onAction="#bearbeiten" text="Bearbeiten" />
+                                    <Button layoutX="178.0" layoutY="258.0" mnemonicParsing="false" onAction="#loeschen" text="Löschen" />
+                                    <Button layoutX="102.0" layoutY="258.0" mnemonicParsing="false" onAction="#speichern" text="Speichern" />
+                                    <Label layoutX="23.0" layoutY="83.0" text="ID" />
+                                    <TextField fx:id="txtId" editable="false" layoutX="115.0" layoutY="79.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Spieler wählen">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
