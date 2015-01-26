@@ -90,12 +90,7 @@ public class RootLayoutController implements Initializable {
                     
                 } else {
                 	//Detailfelder leeren
-	            	 txtId.clear();
-	                 txtName.clear();
-	                 txtVorname.clear();
-	                 txtStrasse.clear();
-	                 txtPlz.clear();
-	                 txtOrt.clear();
+	            	clearDetail();
                 }
             }
 			
@@ -140,7 +135,7 @@ public class RootLayoutController implements Initializable {
 	
 	@FXML
 	private void neuSpieler() {
-		
+	
 	}
 	@FXML
 	private void ladeDaten() {
@@ -153,7 +148,8 @@ public class RootLayoutController implements Initializable {
 		if(disable ==false){
 			DBManager dbm = new DBManager();
 			SpielerModel spieler = new SpielerModel(Integer.parseInt(txtId.getText()), txtName.getText(), txtVorname.getText(), txtStrasse.getText(), Integer.parseInt(txtPlz.getText()), txtOrt.getText());
-	    	try{
+		
+				try{
 	    		dbm.updateSpieler(spieler);
 	    		disable = true;
 	    		refreshTableView();

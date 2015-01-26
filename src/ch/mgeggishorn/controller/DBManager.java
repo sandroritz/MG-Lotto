@@ -107,9 +107,12 @@ public class DBManager {
 	public void insertSpieler(SpielerModel spieler) {
 		// TODO Auto-generated method stub
 		try {
+			System.out.println("insertSpieler");
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "insert into spieler ('name', 'vorname', 'strasse', 'plz', 'ort') values ('"
+			String query = "insert into spieler ('id','name', 'vorname', 'strasse', 'plz', 'ort') values ("
+					+ spieler.getId()
+					+ ", '"
 					+ spieler.getName()
 					+ "', '"
 					+ spieler.getVorname()
@@ -119,7 +122,7 @@ public class DBManager {
 					+ spieler.getPlz()
 					+ ", '" + spieler.getOrt() + "')";
 			System.out.println(query);
-			// s.executeQuery(query);
+			s.execute(query);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -165,6 +168,31 @@ public class DBManager {
 			System.out.println("Error on Building Data");
 		}
 		return spielerData;
+	}
+	
+	public int getLastId(){
+		int id = 0;
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select max(id) as id from spieler");
+			
+			if (rs != null) {
+				
+				while (rs.next()) {
+					id= rs.getInt("id");
+					System.out.println(rs.getInt("id"));
+				}
+
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return id;
+	
 	}
 	
 }
