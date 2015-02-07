@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.view.NeuerSpielerController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Spieler erfassen">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="23.0" layoutY="111.0" text="Name" />
+      <TextField fx:id="txtName" layoutX="115.0" layoutY="107.0" />
+      <TextField fx:id="txtVorname" layoutX="115.0" layoutY="135.0" />
+      <Label layoutX="23.0" layoutY="139.0" text="Vorname" />
+      <TextField fx:id="txtStrasse" layoutX="115.0" layoutY="163.0" />
+      <Label layoutX="23.0" layoutY="167.0" text="Strasse" />
+      <TextField fx:id="txtPlz" layoutX="115.0" layoutY="191.0" />
+      <Label layoutX="23.0" layoutY="195.0" text="PLZ" />
+      <TextField fx:id="txtOrt" layoutX="115.0" layoutY="219.0" />
+      <Label layoutX="23.0" layoutY="223.0" text="Ort" />
+      <Button layoutX="195.0" layoutY="261.0" mnemonicParsing="false" onAction="#speichern" text="Speichern" />
+      <Label layoutX="23.0" layoutY="83.0" text="ID" />
+      <TextField fx:id="txtId" disable="true" editable="false" layoutX="115.0" layoutY="79.0" />
+   </children>
+</AnchorPane>
