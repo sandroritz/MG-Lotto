@@ -12,12 +12,17 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import ch.mgeggishorn.controller.DBManager;
 import ch.mgeggishorn.model.SpielerModel;
 
@@ -37,6 +42,7 @@ public class NeuerSpielerController implements Initializable {
 		@FXML
 		private TextField txtOrt;	
 		
+		public AnchorPane detailAnchorPane;
 		
 		int lastSpielerId;
 		
@@ -51,6 +57,7 @@ public class NeuerSpielerController implements Initializable {
     		e.printStackTrace();
     	}
 	}
+   
 
 	
 	
@@ -64,7 +71,14 @@ public class NeuerSpielerController implements Initializable {
 
 		try {
 			dbm.insertSpieler(spieler);
-
+			
+			
+			Stage stage = new Stage();
+			Parent root = FXMLLoader.load(getClass().getResource("RootLayoutView.fxml"));
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.show();
+			
 			// Detailfelder füllen
 			txtId.setText(String.valueOf(spieler.getId()));
 			txtName.setText(spieler.getName());

@@ -12,12 +12,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import ch.mgeggishorn.controller.DBManager;
 
 
@@ -49,7 +51,10 @@ public class RootLayoutController implements Initializable {
 	
 	//Splitpane
 	@FXML
-	private SplitPane splitPane;
+	private SplitPane mainSplitPane;
+	// -> Anchorpane 2
+	@FXML
+	private AnchorPane detailAnchorPane;
 	
 	// TableView
 
@@ -145,7 +150,7 @@ public class RootLayoutController implements Initializable {
 	@FXML
 	private void neuSpieler() throws IOException {
 	    AnchorPane neuerSpielerView = (AnchorPane)FXMLLoader.load(getClass().getResource("NeuerSpielerView.fxml"));
-		splitPane.getItems().set(1, neuerSpielerView);
+	    mainSplitPane.getItems().set(1, neuerSpielerView);
 	}
 	@FXML
 	private void ladeDaten() {
