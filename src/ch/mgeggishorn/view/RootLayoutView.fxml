@@ -23,7 +23,7 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="menutab" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Spieler verwalten">
             <content>
@@ -77,7 +77,55 @@
           </Tab>
           <Tab text="Spieler wählen">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tblAllSpieler" layoutX="14.0" layoutY="55.0" prefHeight="476.0" prefWidth="309.0">
+                          <columns>
+                            <TableColumn fx:id="colName2" prefWidth="117.0" text="Name" />
+                            <TableColumn fx:id="colVorname2" prefWidth="106.0" text="Vorname" />
+                              <TableColumn fx:id="colOrt2" minWidth="2.0" prefWidth="85.0" text="Ort" />
+                          </columns>
+                        </TableView>
+                        <GridPane layoutX="333.0" layoutY="63.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                        
+   							<RadioButton id="1" fx:id="radiokarte1" layoutX="143.0" layoutY="61.0" selected="true" text="1 Karte">
+   								<toggleGroup>
+   									<ToggleGroup fx:id="radioKarten" />
+   								</toggleGroup>
+   							</RadioButton>
+   							<RadioButton id="3" fx:id="radiokarte3" layoutX="143.0" layoutY="99.0" text="3 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="1" />
+   							<RadioButton id="8" fx:id="radiokarte8" layoutX="143.0" layoutY="135.0" text="8 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="2" />
+   							<RadioButton id="16" fx:id="radiokarte16" layoutX="143.0" layoutY="135.0" text="16 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="3" />
+                              <Button mnemonicParsing="false" onAction="#addCurrentSpieler" prefHeight="25.0" prefWidth="80.0" text="&gt;&gt;" GridPane.rowIndex="5" />
+                              <Button mnemonicParsing="false" onAction="#deleteCurrentSpieler" prefHeight="25.0" prefWidth="80.0" text="&lt;&lt;" GridPane.rowIndex="6" />
+                           </children>
+						
+	
+                        
+                        </GridPane>
+                        <TableView fx:id="tblSelectedSpieler" layoutX="425.0" layoutY="14.0" prefHeight="517.0" prefWidth="361.0">
+                           <columns>
+                              <TableColumn fx:id="colName3" prefWidth="117.0" text="Name" />
+                              <TableColumn fx:id="colVorname3" prefWidth="106.0" text="Vorname" />
+                              <TableColumn fx:id="colOrt3" minWidth="2.0" prefWidth="85.0" text="Ort" />
+                              <TableColumn fx:id="colKarte" prefWidth="75.0" text="Karten" />
+                           </columns>
+                        </TableView>
+                        <TextField fx:id="txtSucheSelect" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="312.0" promptText="Suche..." />
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>
