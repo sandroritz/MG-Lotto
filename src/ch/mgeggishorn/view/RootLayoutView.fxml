@@ -5,13 +5,13 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.view.RootLayoutController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="768.0" minWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.view.RootLayoutController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Datei">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#starteSpiel" text="Spiel starten" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Hilfe">
@@ -23,21 +23,23 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane fx:id="menutab" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="menutab" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Spieler verwalten">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <SplitPane id="mainSplitPane" fx:id="mainSplitPane" dividerPositions="0.43693107932379716" layoutX="14.0" layoutY="14.0" minHeight="518.0" minWidth="771.0">
+                        <SplitPane id="mainSplitPane" fx:id="mainSplitPane" dividerPositions="0.6327967806841046" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="518.0" minWidth="771.0" prefHeight="685.0" prefWidth="995.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
                           <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="683.0" prefWidth="495.0">
                                  <children>
-                                    <TableView fx:id="tblOverview" layoutX="14.0" layoutY="56.0" prefHeight="436.0" prefWidth="304.0">
+                                    <TableView fx:id="tblOverview" layoutX="14.0" layoutY="56.0" prefHeight="613.0" prefWidth="598.0">
                                       <columns>
-                                        <TableColumn fx:id="colName" prefWidth="107.0" text="Name" />
-                                        <TableColumn fx:id="colVorname" prefWidth="94.0" text="Vorname" />
-                                          <TableColumn fx:id="colOrt" prefWidth="102.0" text="Ort" />
+                                        <TableColumn fx:id="colName" prefWidth="149.0" text="Name" />
+                                        <TableColumn fx:id="colVorname" prefWidth="114.0" text="Vorname" />
+                                          <TableColumn fx:id="colStrasse" prefWidth="135.0" text="Strasse" />
+                                          <TableColumn fx:id="colPlz" prefWidth="72.0" text="PLZ" />
+                                          <TableColumn fx:id="colOrt" prefWidth="127.0" text="Ort" />
                                       </columns>
                                     </TableView>
                                     <TextField fx:id="txtSuche" layoutX="14.0" layoutY="14.0" promptText="Suche" />
@@ -45,7 +47,7 @@
                                     <Button layoutX="227.0" layoutY="14.0" mnemonicParsing="false" onAction="#ladeDaten" text="Lade Daten" />
                                  </children>
                               </AnchorPane>
-                            <AnchorPane fx:id="detailAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                            <AnchorPane fx:id="detailAnchorPane" minHeight="0.0" prefHeight="683.0" prefWidth="319.0">
                                  <children>
                                     <Label fx:id="txtTitel" layoutX="14.0" layoutY="14.0" text="Detail">
                                        <font>
@@ -75,18 +77,29 @@
                   </AnchorPane>
             </content>
           </Tab>
+            <Tab text="Serien verwalten">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TreeView fx:id="treeviewRunden" layoutX="700.0" layoutY="14.0" prefHeight="685.0" prefWidth="310.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
           <Tab text="Spieler wählen">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tblAllSpieler" layoutX="14.0" layoutY="55.0" prefHeight="476.0" prefWidth="309.0">
+                        <TableView fx:id="tblAllSpieler" layoutX="14.0" layoutY="55.0" prefHeight="645.0" prefWidth="433.0">
                           <columns>
                             <TableColumn fx:id="colName2" prefWidth="117.0" text="Name" />
                             <TableColumn fx:id="colVorname2" prefWidth="106.0" text="Vorname" />
-                              <TableColumn fx:id="colOrt2" minWidth="2.0" prefWidth="85.0" text="Ort" />
+                              <TableColumn fx:id="colStrasse2" prefWidth="75.0" text="Strasse" />
+                              <TableColumn fx:id="colPlz2" prefWidth="53.0" text="PLZ" />
+                              <TableColumn fx:id="colOrt2" minWidth="2.0" prefWidth="107.0" text="Ort" />
                           </columns>
                         </TableView>
-                        <GridPane layoutX="333.0" layoutY="63.0">
+                        <GridPane layoutX="482.0" layoutY="82.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
@@ -116,15 +129,15 @@
 	
                         
                         </GridPane>
-                        <TableView fx:id="tblSelectedSpieler" layoutX="425.0" layoutY="14.0" prefHeight="517.0" prefWidth="361.0">
+                        <TableView fx:id="tblSelectedSpieler" layoutX="596.0" layoutY="14.0" prefHeight="687.0" prefWidth="414.0">
                            <columns>
-                              <TableColumn fx:id="colName3" prefWidth="117.0" text="Name" />
-                              <TableColumn fx:id="colVorname3" prefWidth="106.0" text="Vorname" />
-                              <TableColumn fx:id="colOrt3" minWidth="2.0" prefWidth="85.0" text="Ort" />
-                              <TableColumn fx:id="colKarte" prefWidth="75.0" text="Karten" />
+                              <TableColumn fx:id="colName3" prefWidth="141.0" text="Name" />
+                              <TableColumn fx:id="colVorname3" prefWidth="99.0" text="Vorname" />
+                              <TableColumn fx:id="colOrt3" minWidth="2.0" prefWidth="107.0" text="Ort" />
+                              <TableColumn fx:id="colKarte" prefWidth="66.0" text="Karten" />
                            </columns>
                         </TableView>
-                        <TextField fx:id="txtSucheSelect" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="312.0" promptText="Suche..." />
+                        <TextField fx:id="txtSucheSelect" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="226.0" promptText="Suche..." />
                      </children></AnchorPane>
             </content>
           </Tab>

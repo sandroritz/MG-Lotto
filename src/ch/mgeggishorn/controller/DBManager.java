@@ -62,14 +62,16 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select id, name, vorname, ort from spieler");
+			rs = s.executeQuery("select id, name, vorname, strasse, plz, ort from spieler");
 			if (rs != null) {
 				while (rs.next()) {
 					int id = rs.getInt("id");
 					String name = rs.getString("name");
 					String vorname = rs.getString("vorname");
+					String strasse = rs.getString("strasse");
+					int plz = rs.getInt("plz");
 					String ort = rs.getString("ort");
-					spielerData.add(new SpielerModel(id, name, vorname, ort));
+					spielerData.add(new SpielerModel(id, name, vorname,strasse, plz, ort));
 				}
 			}
 		} catch (Exception e) {
@@ -153,16 +155,18 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			System.out.println("select id, name, vorname, ort from spieler where name like'%" + searchQuery + "%' or vorname like'%" + searchQuery + "%' or strasse like'%" + searchQuery + "%' or plzlike'%" + searchQuery + "%' or ort like'%" + searchQuery + "%'");
-			rs = s.executeQuery("select id, name, vorname, ort from spieler where name like '%" + searchQuery + "%' or vorname like '%" + searchQuery + "%' or strasse like '%" + searchQuery + "%' or plz like '%" + searchQuery + "%' or ort like '%" + searchQuery + "%'");
+			System.out.println("select id, name, vorname, strasse, plz, ort from spieler where name like'%" + searchQuery + "%' or vorname like'%" + searchQuery + "%' or strasse like'%" + searchQuery + "%' or plz like'%" + searchQuery + "%' or ort like'%" + searchQuery + "%'");
+			rs = s.executeQuery("select id, name, vorname, strasse, plz, ort from spieler where name like '%" + searchQuery + "%' or vorname like '%" + searchQuery + "%' or strasse like '%" + searchQuery + "%' or plz like '%" + searchQuery + "%' or ort like '%" + searchQuery + "%'");
 			spielerData.clear();
 			if (rs != null) {
 				while (rs.next()) {
 					int id = rs.getInt("id");
 					String name = rs.getString("name");
 					String vorname = rs.getString("vorname");
+					String strasse = rs.getString("strasse");
+					int plz = rs.getInt("plz");
 					String ort = rs.getString("ort");
-					spielerData.add(new SpielerModel(id, name, vorname, ort));
+					spielerData.add(new SpielerModel(id, name, vorname, strasse, plz, ort));
 				}
 			}
 		} catch (Exception e) {

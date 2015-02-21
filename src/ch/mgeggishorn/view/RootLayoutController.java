@@ -2,6 +2,7 @@ package ch.mgeggishorn.view;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -21,6 +22,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -93,6 +96,10 @@ public class RootLayoutController implements Initializable {
 	@FXML
 	private TableColumn<SpielerModel, String> colVorname;
 	@FXML
+	private TableColumn<SpielerModel, String> colStrasse;
+	@FXML
+	private TableColumn<SpielerModel, String> colPlz;
+	@FXML
 	private TableColumn<SpielerModel, String> colOrt;
 	
 	//TableAllSpieler
@@ -100,6 +107,10 @@ public class RootLayoutController implements Initializable {
 	private TableColumn<SpielerModel, String> colName2;
 	@FXML
 	private TableColumn<SpielerModel, String> colVorname2;
+	@FXML
+	private TableColumn<SpielerModel, String> colStrasse2;
+	@FXML
+	private TableColumn<SpielerModel, String> colPlz2;
 	@FXML
 	private TableColumn<SpielerModel, String> colOrt2;
 	
@@ -128,11 +139,20 @@ public class RootLayoutController implements Initializable {
 	private RadioButton radiokarte16;
 	
 	
+	
+	//Serienverwaltung
+	@FXML
+	TreeView treeviewRunden;
+	
+
+
+	
     public void initialize(URL url, ResourceBundle rb) {
     	
     	spieler = null;
     	selectedSpieler = null;
    
+    	createTree();
     	
     	DBManager dbm = new DBManager();
     	try{
@@ -159,6 +179,10 @@ public class RootLayoutController implements Initializable {
 				"name"));
 		colVorname2.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
 						"vorname"));
+		colStrasse2.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
+				"strasse"));
+		colPlz2.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
+				"plz"));
 		colOrt2.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
 				"ort"));
 		
@@ -211,6 +235,10 @@ public class RootLayoutController implements Initializable {
 		colVorname
 				.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
 						"vorname"));
+		colStrasse.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
+				"strasse"));
+		colPlz.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
+				"plz"));
 		colOrt.setCellValueFactory(new PropertyValueFactory<SpielerModel, String>(
 				"ort"));
 
@@ -364,6 +392,13 @@ public class RootLayoutController implements Initializable {
 		
 	}
 	
+	//Spiel starten
+	
+	@FXML
+	private void starteSpiel(){
+	
+	}
+	
 	
 	
 	
@@ -448,5 +483,56 @@ public class RootLayoutController implements Initializable {
     	selectedKarte = Integer.parseInt(selectedRadio.getId());
     	return selectedKarte;
     }
+    
+    //Serienverwaltung
+    
+	public void createTree(String... rootItems) {
+		
+		List<TreeItem<String>> rundenList = new ArrayList<TreeItem<String>>();
+		
+		List<TreeItem<String>> serienList1 = new ArrayList<TreeItem<String>>();
+		List<TreeItem<String>> serienList2 = new ArrayList<TreeItem<String>>();
+		List<TreeItem<String>> serienList3 = new ArrayList<TreeItem<String>>();
+		
+	    
+	    TreeItem<String> root = new TreeItem<>("Runden");
+
+	    TreeItem<String> runde1 = new TreeItem<>("Runde 1");
+	    TreeItem<String> runde2 = new TreeItem<>("Runde 2");
+	    TreeItem<String> runde3 = new TreeItem<>("Runde 3");
+	    
+	    TreeItem<String> serie1 = new TreeItem<>("Serie 1");
+	    TreeItem<String> serie2 = new TreeItem<>("Serie 2");
+	    TreeItem<String> serie3 = new TreeItem<>("Serie 3");
+	    TreeItem<String> serie4 = new TreeItem<>("Serie 4");
+	    TreeItem<String> serie5 = new TreeItem<>("Serie 5");
+	    TreeItem<String> serie6 = new TreeItem<>("Serie 6");
+	    TreeItem<String> serie7 = new TreeItem<>("Serie 7");
+	    TreeItem<String> serie8 = new TreeItem<>("Serie 8");
+	    TreeItem<String> serie9 = new TreeItem<>("Serie 9");
+	    
+	    serienList1.add(serie1);
+	    serienList1.add(serie2);
+	    serienList1.add(serie3);
+	    serienList2.add(serie4);
+	    serienList2.add(serie5);
+	    serienList2.add(serie6);
+	    serienList3.add(serie7);
+	    serienList3.add(serie8);
+	    serienList3.add(serie9);
+	    
+	    runde1.getChildren().addAll(serienList1);
+	    runde2.getChildren().addAll(serienList2);
+	    runde3.getChildren().addAll(serienList3);
+	    
+	    rundenList.add(runde1);
+		rundenList.add(runde2);
+		rundenList.add(runde3);
+
+	    root.getChildren().addAll(rundenList);
+	    treeviewRunden.setRoot(root);
+	}
+	
+	
 
 }
