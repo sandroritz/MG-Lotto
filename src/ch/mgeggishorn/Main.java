@@ -30,6 +30,8 @@ public class Main extends Application {
 			stage.setScene(scene);
 			stage.show();
 //		}
+			Stage stageToClose = (Stage) txtBenutzer.getScene().getWindow();
+			stageToClose.close();
 		
 	}
 	
@@ -42,6 +44,8 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			
+			
 		
 			
 			

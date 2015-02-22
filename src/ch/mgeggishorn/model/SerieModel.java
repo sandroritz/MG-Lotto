@@ -5,27 +5,22 @@ import javafx.beans.property.SimpleStringProperty;
 
 
 public class SerieModel {
-	private SimpleIntegerProperty id;
+	
 	private SimpleIntegerProperty serieNr;
+	private SimpleIntegerProperty rundeNr;
 	private SimpleIntegerProperty gewinnerId;
 	private SimpleStringProperty preis;
 
 
 	
-	public SerieModel(int id, int serieNr,
-			int gewinnerId, String preis) {
-	
-		this.id = new SimpleIntegerProperty(id);
+	public SerieModel(int serieNr, int rundeNr, String preis) {
 		this.serieNr = new SimpleIntegerProperty(serieNr);
-		this.gewinnerId = new SimpleIntegerProperty(gewinnerId);
+		this.rundeNr = new SimpleIntegerProperty(rundeNr);
 		this.preis = new SimpleStringProperty(preis);
 	}
 	
 	
-	public void setId(int id) {
-		this.id.set(id);
-	}
-	
+
 	public int getSerieNr() {
 		return serieNr.get();
 	}
@@ -33,6 +28,15 @@ public class SerieModel {
 
 	public void setSerieNr(int serieNr) {
 		this.serieNr.set(serieNr);
+	}
+	
+	public int getRundeNr() {
+		return rundeNr.get();
+	}
+
+
+	public void setRundeNr(int rundeNr) {
+		this.rundeNr.set(rundeNr);
 	}
 
 

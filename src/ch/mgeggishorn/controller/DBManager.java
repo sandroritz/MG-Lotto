@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.mgeggishorn.model.CurrentSpielerModel;
+import ch.mgeggishorn.model.SerieModel;
 import ch.mgeggishorn.model.SpielerModel;
 
 public class DBManager {
@@ -277,6 +278,31 @@ public class DBManager {
 					e.printStackTrace();
 					System.out.println("Error inserting Data");
 				}
+	}
+
+	public List<SerieModel> getAllSerien() {
+		// TODO Auto-generated method stub
+		List<SerieModel> serien = new ArrayList<SerieModel>();
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select serienNr, fkRundenNr, preis.name as preis from serie, preis, runde where serie.fkRundenNr = runde.rundenNr and serie.fkPreis=preis.id;");
+			if (rs != null) {
+				while (rs.next()) {
+					int serienNr = rs.getInt("serienNr");
+					int rundenNr = rs.getInt("fkRundenNr");
+					String preis = rs.getString("preis");
+					
+					
+					serien.add(new SerieModel(serienNr, rundenNr, preis));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return serien;
 	}
 	
 }

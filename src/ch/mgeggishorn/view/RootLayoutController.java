@@ -3,8 +3,11 @@ package ch.mgeggishorn.view;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,6 +34,8 @@ import ch.mgeggishorn.controller.DBManager;
 
 
 import ch.mgeggishorn.model.CurrentSpielerModel;
+import ch.mgeggishorn.model.RundenModel;
+import ch.mgeggishorn.model.SerieModel;
 import ch.mgeggishorn.model.SpielerModel;
 
 public class RootLayoutController implements Initializable {
@@ -143,6 +148,9 @@ public class RootLayoutController implements Initializable {
 	//Serienverwaltung
 	@FXML
 	TreeView treeviewRunden;
+	
+	List<SerieModel> serien;
+  
 	
 
 
@@ -486,50 +494,68 @@ public class RootLayoutController implements Initializable {
     
     //Serienverwaltung
     
-	public void createTree(String... rootItems) {
+	public void createTree() {
+		List<TreeItem<String>> serienForCurrentRunde = new ArrayList<TreeItem<String>>();
 		
-		List<TreeItem<String>> rundenList = new ArrayList<TreeItem<String>>();
+		DBManager dbm = new DBManager();
+    	try{
+    		serien = dbm.getAllSerien();
+    		
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+    	int maxRunden =3;
+    	int rundeNr = 1;
+    	
+    	//List[] runden = new List[maxRunden];
+    	List<ArrayList> runden = new ArrayList<ArrayList>();
+    	for(int i =0; i <=maxRunden;i++)
+    	{
+    		runden.add(new ArrayList<>());
+    	}
+    	
+   
+    	
+  
+    	
+    	for(int i = rundeNr; i <= maxRunden;i++){
+    		serienForCurrentRunde = null;
+			serienForCurrentRunde = new ArrayList<TreeItem<String>>();
+			int counter = 0; //counter zeigt auf SerienNr
+    		for (SerieModel serie : serien) {
+    			
+				//System.out.println("Runde Nr: " + i);
+					if(serie.getRundeNr() == i){
+						serienForCurrentRunde.add(new TreeItem<String>("SerienNr: " +serie.getSerieNr()));
+						serienForCurrentRunde.get(counter).getChildren().add((new TreeItem<String>("Preis: " +serie.getPreis()))); //Preise von Serien hinzufügen
+						counter++; //nächste Serie durchlaufen
+					}
+					else{
+						//System.out.println("Falsche Runde: " + serie.getRundeNr());
+					}
+					
+					
+			}
+    		 
+    		//System.out.println(serienForCurrentRunde.get(0).getPreis());
+			runden.set(i, (ArrayList) serienForCurrentRunde);
+		}
+    	
+    	
+    	List<TreeItem<String>> rundenList = new ArrayList<TreeItem<String>>();
+    	TreeItem<String> root = new TreeItem<>("Runden");
+	    
+	    
+	    for(int j = 1; j <= maxRunden; j++){
+	    	rundenList.add(new TreeItem<String>("RundenNr: " + j)); //Runden Menuepunkte werden erstellt
+	    	rundenList.get(j-1).getChildren().addAll(runden.get(j)); //Serien werden den Runden hinzugefügt
+	    }
+	    
 		
-		List<TreeItem<String>> serienList1 = new ArrayList<TreeItem<String>>();
-		List<TreeItem<String>> serienList2 = new ArrayList<TreeItem<String>>();
-		List<TreeItem<String>> serienList3 = new ArrayList<TreeItem<String>>();
+		root.getChildren().addAll(rundenList);
 		
-	    
-	    TreeItem<String> root = new TreeItem<>("Runden");
-
-	    TreeItem<String> runde1 = new TreeItem<>("Runde 1");
-	    TreeItem<String> runde2 = new TreeItem<>("Runde 2");
-	    TreeItem<String> runde3 = new TreeItem<>("Runde 3");
-	    
-	    TreeItem<String> serie1 = new TreeItem<>("Serie 1");
-	    TreeItem<String> serie2 = new TreeItem<>("Serie 2");
-	    TreeItem<String> serie3 = new TreeItem<>("Serie 3");
-	    TreeItem<String> serie4 = new TreeItem<>("Serie 4");
-	    TreeItem<String> serie5 = new TreeItem<>("Serie 5");
-	    TreeItem<String> serie6 = new TreeItem<>("Serie 6");
-	    TreeItem<String> serie7 = new TreeItem<>("Serie 7");
-	    TreeItem<String> serie8 = new TreeItem<>("Serie 8");
-	    TreeItem<String> serie9 = new TreeItem<>("Serie 9");
-	    
-	    serienList1.add(serie1);
-	    serienList1.add(serie2);
-	    serienList1.add(serie3);
-	    serienList2.add(serie4);
-	    serienList2.add(serie5);
-	    serienList2.add(serie6);
-	    serienList3.add(serie7);
-	    serienList3.add(serie8);
-	    serienList3.add(serie9);
-	    
-	    runde1.getChildren().addAll(serienList1);
-	    runde2.getChildren().addAll(serienList2);
-	    runde3.getChildren().addAll(serienList3);
-	    
-	    rundenList.add(runde1);
-		rundenList.add(runde2);
-		rundenList.add(runde3);
-
-	    root.getChildren().addAll(rundenList);
+		
 	    treeviewRunden.setRoot(root);
 	}
 	

@@ -7,17 +7,17 @@ import javafx.beans.property.SimpleStringProperty;
 
 
 public class RundenModel {
-	private SimpleIntegerProperty id;
 	private SimpleIntegerProperty rundenNr;
 	private List<SerieModel> serien;
 	private SimpleStringProperty rundenTyp;
 	
-	public int getId() {
-		return id.get();
+	public RundenModel(int rundenNr, List<SerieModel> serien, String rundenTyp) {
+		this.rundenNr = new SimpleIntegerProperty(rundenNr);
+		this.serien= serien;
+		this.rundenTyp = new SimpleStringProperty(rundenTyp);
 	}
-	public void setId(int id) {
-		this.id.set(id);
-	}
+	
+
 	public int getRundenNr() {
 		return rundenNr.get();
 	}

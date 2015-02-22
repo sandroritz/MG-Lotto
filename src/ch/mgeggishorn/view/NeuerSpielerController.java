@@ -79,6 +79,11 @@ public class NeuerSpielerController implements Initializable {
 			stage.setScene(scene);
 			stage.show();
 			
+			Stage stageToClose = (Stage) txtId.getScene().getWindow();
+			stageToClose.close();
+			
+			
+			
 			// Detailfelder füllen
 			txtId.setText(String.valueOf(spieler.getId()));
 			txtName.setText(spieler.getName());
