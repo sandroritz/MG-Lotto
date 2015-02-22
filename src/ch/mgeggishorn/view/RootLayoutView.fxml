@@ -82,6 +82,28 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <TreeView fx:id="treeviewRunden" layoutX="700.0" layoutY="14.0" prefHeight="685.0" prefWidth="310.0" />
+                        <Button layoutX="394.0" layoutY="101.0" mnemonicParsing="false" onAction="#addSerie" text="Serie hinzufügen" />
+                        <Label layoutX="35.0" layoutY="84.0" text="Serie hinzufügen" />
+                        <ComboBox fx:id="rundeWaehlenCombo" layoutX="35.0" layoutY="101.0" prefWidth="150.0" promptText="Runde wählen" />
+                        <ComboBox fx:id="preisWaehlenCombo" layoutX="217.0" layoutY="101.0" prefWidth="150.0" promptText="Preis wählen" />
+                        <Label layoutX="35.0" layoutY="139.0" text="Serie löschen" />
+                        <ComboBox fx:id="serieWaehlenCombo" layoutX="35.0" layoutY="156.0" prefWidth="150.0" promptText="Serie wählen" />
+                        <Button layoutX="217.0" layoutY="156.0" mnemonicParsing="false" onAction="#deleteSerie" text="Serie löschen" />
+                        <Label layoutX="35.0" layoutY="200.0" text="Runde hinzufügen" />
+                        <Button layoutX="217.0" layoutY="217.0" mnemonicParsing="false" onAction="#addRunde" text="Runde hinzufügen" />
+                        <Label layoutX="35.0" layoutY="253.0" text="Runde löschen" />
+                        <ComboBox fx:id="rundeWaehlen2Combo" layoutX="35.0" layoutY="270.0" prefWidth="150.0" promptText="Runde wählen" />
+                        <Button layoutX="217.0" layoutY="270.0" mnemonicParsing="false" onAction="#deleteRunde" text="Runde löschen" />
+                        <Separator layoutX="37.0" layoutY="391.0" prefHeight="4.0" prefWidth="464.0" />
+                        <ComboBox fx:id="rundentypWaehlenCombo" layoutX="35.0" layoutY="217.0" prefWidth="150.0" promptText="Rundentyp wählen" />
+                        <Label layoutX="35.0" layoutY="308.0" text="Rundentyp ändern" />
+                        <ComboBox fx:id="rundeWaehlen3Combo" layoutX="35.0" layoutY="325.0" prefWidth="150.0" promptText="Runde wählen" />
+                        <ComboBox fx:id="neuerRundentypWaehlenCombo" layoutX="217.0" layoutY="325.0" prefWidth="150.0" promptText="Neuer Typ wählen" />
+                        <Button layoutX="394.0" layoutY="325.0" mnemonicParsing="false" onAction="#changeTyp" text="Bestätigen" />
+                        <Button layoutX="217.0" layoutY="431.0" mnemonicParsing="false" onAction="#addPreis" text="Preis hinzufügen" />
+                        <TextField fx:id="txtPreisErstellen" layoutX="36.0" layoutY="431.0" text="Preis eingeben..." />
+                        <Label layoutX="36.0" layoutY="414.0" text="Preis erstellen" />
+                        <Separator layoutX="37.0" layoutY="190.0" prefHeight="4.0" prefWidth="464.0" />
                      </children>
                   </AnchorPane>
               </content>

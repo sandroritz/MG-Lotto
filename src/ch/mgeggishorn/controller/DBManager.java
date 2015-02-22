@@ -15,6 +15,14 @@ public class DBManager {
 	List<SpielerModel> spielerData = new ArrayList<>();
 	List<SpielerModel> spielerDataOf = new ArrayList<>();
 	List<CurrentSpielerModel> currentSpielerData = new ArrayList<>();
+	List<String> rundenNr = new ArrayList<>();
+	List<String> preise = new ArrayList<>();
+	List<String> serien = new ArrayList<>();
+	List<String> rundentypen = new ArrayList<>();
+	
+	
+	
+	
 /**
  * Gibt die Daten von einem gewissen SpielerId zurueck
  * @param spieler
@@ -280,6 +288,8 @@ public class DBManager {
 				}
 	}
 
+	//Serienverwaltung
+	
 	public List<SerieModel> getAllSerien() {
 		// TODO Auto-generated method stub
 		List<SerieModel> serien = new ArrayList<SerieModel>();
@@ -303,6 +313,105 @@ public class DBManager {
 			System.out.println("Error on Building Data");
 		}
 		return serien;
+	}
+
+	//Serienverwaltung
+	
+	public void addPreis(String text) {
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("insertPreis");
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "insert into preis ('name') values ('"+text+"')";
+			
+			System.out.println(query);
+			s.execute(query);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error inserting Data");
+		}
+	}
+
+	public List<String> getRunden() {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select rundenNr from runde");
+			if (rs != null) {
+				while (rs.next()) {
+					String runde = rs.getString("rundenNr");
+					rundenNr.add(runde);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return rundenNr;
+	}
+
+	public List<String> getPreise() {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select name from preis");
+			if (rs != null) {
+				while (rs.next()) {
+					String name = rs.getString("name");
+					preise.add(name);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return preise;
+	}
+
+	public List<String> getSerien() {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select serienNr from serie");
+			if (rs != null) {
+				while (rs.next()) {
+					String serienNr = rs.getString("serienNr");
+					serien.add(serienNr);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return serien;
+	}
+
+	public List<String> getRundentyp() {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select name from rundenTyp");
+			if (rs != null) {
+				while (rs.next()) {
+					String rundentyp = rs.getString("name");
+					rundentypen.add(rundentyp);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return rundentypen;
 	}
 	
 }

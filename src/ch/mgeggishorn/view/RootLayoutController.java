@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
@@ -147,9 +148,27 @@ public class RootLayoutController implements Initializable {
 	
 	//Serienverwaltung
 	@FXML
-	TreeView treeviewRunden;
+	private TreeView treeviewRunden;
+	private List<SerieModel> serien;
 	
-	List<SerieModel> serien;
+	@FXML
+	private ComboBox<String> rundeWaehlenCombo;
+	@FXML
+	private ComboBox<String> preisWaehlenCombo;
+	@FXML
+	private ComboBox<String> serieWaehlenCombo;
+	@FXML
+	private ComboBox<String> rundentypWaehlenCombo;
+	@FXML
+	private ComboBox<String> rundeWaehlen2Combo;
+	@FXML
+	private ComboBox<String> rundeWaehlen3Combo;
+	@FXML
+	private ComboBox<String> neuerRundentypWaehlenCombo;
+	@FXML
+	private TextField txtPreisErstellen;
+	
+	
   
 	
 
@@ -161,6 +180,7 @@ public class RootLayoutController implements Initializable {
     	selectedSpieler = null;
    
     	createTree();
+    	initializeCombos();
     	
     	DBManager dbm = new DBManager();
     	try{
@@ -302,6 +322,8 @@ public class RootLayoutController implements Initializable {
 		    
 		    }
 		});
+		
+		
     }
 	
 	@FXML
@@ -492,7 +514,7 @@ public class RootLayoutController implements Initializable {
     	return selectedKarte;
     }
     
-    //Serienverwaltung
+    //Serienverwaltung Funktionen
     
 	public void createTree() {
 		List<TreeItem<String>> serienForCurrentRunde = new ArrayList<TreeItem<String>>();
@@ -557,6 +579,61 @@ public class RootLayoutController implements Initializable {
 		
 		
 	    treeviewRunden.setRoot(root);
+	}
+	
+	public void initializeCombos(){
+		DBManager dbm = new DBManager();
+    	try{
+    		List<String> rundenNr = dbm.getRunden();
+    		rundeWaehlenCombo.getItems().addAll(rundenNr);
+    		rundeWaehlen2Combo.getItems().addAll(rundenNr);
+    		rundeWaehlen3Combo.getItems().addAll(rundenNr);
+    		
+    		List<String> preise = dbm.getPreise();
+    		preisWaehlenCombo.getItems().addAll(preise);
+    		
+    		List<String> serienNr = dbm.getSerien();
+    		serieWaehlenCombo.getItems().addAll(serienNr);
+    		
+    		List<String> rundenTyp = dbm.getRundentyp();
+    		rundentypWaehlenCombo.getItems().addAll(rundenTyp);
+    		neuerRundentypWaehlenCombo.getItems().addAll(rundenTyp);
+    		
+    		
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
+	}
+	
+	@FXML
+	private void addSerie(){
+		
+	}
+	@FXML
+	private void deleteSerie(){
+		
+	}
+	@FXML
+	private void addRunde(){
+		
+	}
+	@FXML
+	private void deleteRunde(){
+		
+	}
+	@FXML
+	private void changeTyp(){
+		
+	}
+	@FXML
+	private void addPreis(){
+		DBManager dbm = new DBManager();
+    	try{
+    		dbm.addPreis(txtPreisErstellen.getText());
+    		
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
 	}
 	
 	
