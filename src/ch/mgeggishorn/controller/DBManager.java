@@ -12,6 +12,7 @@ import ch.mgeggishorn.model.SpielerModel;
 
 public class DBManager {
 	private static Connection con;
+	
 	List<SpielerModel> spielerData = new ArrayList<>();
 	List<SpielerModel> spielerDataOf = new ArrayList<>();
 	List<CurrentSpielerModel> currentSpielerData = new ArrayList<>();
@@ -19,6 +20,14 @@ public class DBManager {
 	List<String> preise = new ArrayList<>();
 	List<String> serien = new ArrayList<>();
 	List<String> rundentypen = new ArrayList<>();
+	List<Integer> fkpreis = new ArrayList<>();	
+	List<Integer> rundenTyp = new ArrayList<>();
+	List<Integer> neuerRundenTypen = new ArrayList<>();
+	List<Integer> maxRundenNr = new ArrayList<>();
+	List<Integer> usedSerieNr = new ArrayList<>();
+	List<String> NoUsedSerieNr = new ArrayList<>();
+	List<String> usedSerieNr2 = new ArrayList<>();
+	
 	
 	
 	
@@ -55,6 +64,7 @@ public class DBManager {
 			 * for (SpielerModel spielerModel : spielerDataOf) {
 			 * System.out.println(spielerModel.getId()); }
 			 */
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -83,6 +93,7 @@ public class DBManager {
 					spielerData.add(new SpielerModel(id, name, vorname,strasse, plz, ort));
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -106,7 +117,7 @@ public class DBManager {
 					+ spieler.getId();
 			System.out.println(query);
 			s.execute(query);
-
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error updating Data");
@@ -136,7 +147,7 @@ public class DBManager {
 					+ ", '" + spieler.getOrt() + "')";
 			System.out.println(query);
 			s.execute(query);
-
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error inserting Data");
@@ -151,7 +162,7 @@ public class DBManager {
 			String query = "delete from spieler where id="+id;
 			System.out.println(query);
 			s.execute(query);
-
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error deleting Data");
@@ -178,6 +189,7 @@ public class DBManager {
 					spielerData.add(new SpielerModel(id, name, vorname, strasse, plz, ort));
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -201,7 +213,7 @@ public class DBManager {
 				}
 
 			}
-		
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -233,7 +245,7 @@ public class DBManager {
 					
 					System.out.println(query);
 					s.execute(query);
-
+					con.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("Error inserting Data");
@@ -262,6 +274,7 @@ public class DBManager {
 					currentSpielerData.add(new CurrentSpielerModel(id, name, vorname, ort, karten));
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -272,16 +285,13 @@ public class DBManager {
 	public void deleteCurrentSpieler(int id) {
 		// TODO Auto-generated method stub
 				try {
-					System.out.println("insertSpieler");
+					System.out.println("delete Current Spieler");
 					con = DBConnector.getConnected();
 					Statement s = con.createStatement();
 					String query = "delete from currentSpieler where id="+id;
 					System.out.println(query);
 					s.execute(query);
-					
-					System.out.println(query);
-					s.execute(query);
-
+					con.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("Error inserting Data");
@@ -297,7 +307,7 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select serienNr, fkRundenNr, preis.name as preis from serie, preis, runde where serie.fkRundenNr = runde.rundenNr and serie.fkPreis=preis.id;");
+			rs = s.executeQuery("select serienNr, fkRundenNr, preis.name as preis from serie, preis, runde where serie.fkRundenNr = runde.rundenNr and serie.fkPreis=preis.id order by fkRundenNr, serienNr;");
 			if (rs != null) {
 				while (rs.next()) {
 					int serienNr = rs.getInt("serienNr");
@@ -308,6 +318,7 @@ public class DBManager {
 					serien.add(new SerieModel(serienNr, rundenNr, preis));
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -327,7 +338,7 @@ public class DBManager {
 			
 			System.out.println(query);
 			s.execute(query);
-
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error inserting Data");
@@ -347,6 +358,7 @@ public class DBManager {
 					rundenNr.add(runde);
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -367,6 +379,7 @@ public class DBManager {
 					preise.add(name);
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -387,6 +400,7 @@ public class DBManager {
 					serien.add(serienNr);
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -407,11 +421,236 @@ public class DBManager {
 					rundentypen.add(rundentyp);
 				}
 			}
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
 		}
 		return rundentypen;
 	}
+
+	public void deleteSerie(String serienNr, String fkRundenNr) {
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("delete Serie " + serienNr +" from Runde " +fkRundenNr);
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "delete from serie where serienNr="+serienNr+" and fkRundenNr="+fkRundenNr;
+			
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error deleting Data");
+		}
+	}
+
+	public List<String> getNoUsedSerieNr(String selected) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			usedSerieNr = new ArrayList<>();
+			rs = s.executeQuery("select serienNr from serie where fkRundenNr="+selected);
+			if (rs != null) {
+				while (rs.next()) {
+					int serienNr = rs.getInt("serienNr");
+					usedSerieNr.add(serienNr);
+				}
+			}
+			
+			if (!usedSerieNr.contains(1) && !usedSerieNr.contains(2) && !usedSerieNr.contains(3)){
+				System.out.println("into");
+				NoUsedSerieNr.add(String.valueOf(1));
+				NoUsedSerieNr.add(String.valueOf(2));
+				NoUsedSerieNr.add(String.valueOf(3));
+			}
+			else{
+				for (int i = 1; i <= 3; i++) {
+					System.out.println("i:"+ i);
+					if(!usedSerieNr.contains(i)){
+						NoUsedSerieNr.add(String.valueOf(i));
+					}
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return NoUsedSerieNr;
+	}
+
+	public List<String> getUsedSerieNr(String selected) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select serienNr from serie where fkRundenNr="+selected);
+			if (rs != null) {
+				while (rs.next()) {
+					String serienNr = rs.getString("serienNr");
+					usedSerieNr2.add(serienNr);
+				}
+			}
+			con.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return usedSerieNr2;
+	}
+
+	public void addSerie(String rundeNr,String serienNr, String preis) {
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("insertSerie");
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select id from preis where name='"+preis+"'");
+			if (rs != null) {
+				while (rs.next()) {
+					int fkPreis = rs.getInt("id");
+					fkpreis.add(fkPreis);
+				}
+			}
+			
+			String query = "insert into serie ('serienNr', 'fkRundenNr', 'fkPreis') values ("+serienNr+","+rundeNr+","+fkpreis.get(0)+")";
+			
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error inserting Data");
+		}
+	}
+
+	public void addRunde(String rundenTypName) {
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("insertRunde");
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select id from rundenTyp where name='"+rundenTypName+"'");
+			if (rs != null) {
+				while (rs.next()) {
+					int rundenTypNr = rs.getInt("id");
+					rundenTyp.add(rundenTypNr);
+				}
+			}
+			int maxRundenNr= getMaxRundenNr();
+			maxRundenNr++;
+			
+			String query = "insert into runde ('rundenNr', 'fkRundentyp') values ("+maxRundenNr+","+rundenTyp.get(0)+")";
+			
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error inserting Data");
+		}
+	}
+
+	public int getMaxRundenNr() {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select max(RundenNr) as maxRundenNr from runde"); //Last/Max RundenNr
+			if (rs != null) {
+				while (rs.next()) {
+					int rundenNr = rs.getInt("maxRundenNr");
+					maxRundenNr.add(rundenNr);
+				}
+			}
+			con.close();
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error selecting Data");
+		}
+		return maxRundenNr.get(0);
+	}
+
+	public void deleteRunde(String rundenNr) { //müssen noch Fremdschlüssel beziehungen implementiert werden fürs löschen
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("delete Runde " + rundenNr);
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "delete from runde where rundenNr="+rundenNr;
+			
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error deleting Data");
+		}
+	}
+
+	public void changeRundenTyp(String rundenNr, String neuerRundenTyp) {
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("change Rundentyp");
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select id from rundenTyp where name='"+neuerRundenTyp+"'");
+			if (rs != null) {
+				while (rs.next()) {
+					int rundenTyp = rs.getInt("id");
+					neuerRundenTypen.add(rundenTyp);
+				}
+			}
+			
+
+			String query = "update runde set fkRundentyp="+neuerRundenTypen.get(0)+ " where rundenNr=" + rundenNr;
+			
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error updating Data");
+		}
+		
+	}
+	
+	public String getRundenTypById(int id){
+		String rundenTypName = "";
+		try{
+		con = DBConnector.getConnected();
+		Statement s = con.createStatement();
+		ResultSet rs;
+		
+		rs = s.executeQuery("select name from runde, rundenTyp where runde.fkRundentyp = rundenTyp.id and runde.rundenNr="+id);
+		if (rs != null) {
+			while (rs.next()) {
+				rundenTypName = rs.getString("name");
+			}
+		}
+		con.close();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error selecting Data");
+		}
+		
+		return rundenTypName;
+	
+	}
+	
+	
 	
 }

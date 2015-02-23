@@ -158,11 +158,15 @@ public class RootLayoutController implements Initializable {
 	@FXML
 	private ComboBox<String> serieWaehlenCombo;
 	@FXML
+	private ComboBox<String> serieWaehlen2Combo;
+	@FXML
 	private ComboBox<String> rundentypWaehlenCombo;
 	@FXML
 	private ComboBox<String> rundeWaehlen2Combo;
 	@FXML
 	private ComboBox<String> rundeWaehlen3Combo;
+	@FXML
+	private ComboBox<String> rundeWaehlen4Combo;
 	@FXML
 	private ComboBox<String> neuerRundentypWaehlenCombo;
 	@FXML
@@ -323,6 +327,38 @@ public class RootLayoutController implements Initializable {
 		    }
 		});
 		
+		rundeWaehlenCombo.valueProperty().addListener(new ChangeListener<String>() {
+	        @Override public void changed(ObservableValue ov, String t, String selected) {
+	              System.out.println(selected);
+	              serieWaehlen2Combo.getItems().clear();
+	              DBManager dbm = new DBManager();
+		          	try{
+		          		List<String> noUsedSerieNr = dbm.getNoUsedSerieNr(selected);
+		          		serieWaehlen2Combo.getItems().addAll(noUsedSerieNr);
+		  
+		          	
+		          	
+		          	} catch(Exception e){
+		          		e.printStackTrace();
+		          	}
+	          }    
+	      });
+		 rundeWaehlen4Combo.valueProperty().addListener(new ChangeListener<String>() {
+	        @Override public void changed(ObservableValue ov, String t, String selected) {
+	              System.out.println(selected);
+	              serieWaehlenCombo.getItems().clear();
+	              DBManager dbm = new DBManager();
+		          	try{
+		          		List<String> usedSerieNr = dbm.getUsedSerieNr(selected);
+		          		serieWaehlenCombo.getItems().addAll(usedSerieNr);
+		  
+		          	
+		          	
+		          	} catch(Exception e){
+		          		e.printStackTrace();
+		          	}
+	          }    
+	      });
 		
     }
 	
@@ -527,7 +563,8 @@ public class RootLayoutController implements Initializable {
     		e.printStackTrace();
     	}
     	
-    	int maxRunden =3;
+    	int maxRunden =dbm.getMaxRundenNr();
+    	System.out.println(maxRunden);
     	int rundeNr = 1;
     	
     	//List[] runden = new List[maxRunden];
@@ -570,12 +607,15 @@ public class RootLayoutController implements Initializable {
 	    
 	    
 	    for(int j = 1; j <= maxRunden; j++){
-	    	rundenList.add(new TreeItem<String>("RundenNr: " + j)); //Runden Menuepunkte werden erstellt
+	    	String rundenTypName = dbm.getRundenTypById(j);
+	    	//String rundenTypName = "test";
+	    	rundenList.add(new TreeItem<String>("RundenNr: " + j + " ("+rundenTypName+")")); //Runden Menuepunkte werden erstellt
 	    	rundenList.get(j-1).getChildren().addAll(runden.get(j)); //Serien werden den Runden hinzugefügt
 	    }
 	    
-		
+	    root.setExpanded(true);;
 		root.getChildren().addAll(rundenList);
+		
 		
 		
 	    treeviewRunden.setRoot(root);
@@ -588,13 +628,11 @@ public class RootLayoutController implements Initializable {
     		rundeWaehlenCombo.getItems().addAll(rundenNr);
     		rundeWaehlen2Combo.getItems().addAll(rundenNr);
     		rundeWaehlen3Combo.getItems().addAll(rundenNr);
+    		rundeWaehlen4Combo.getItems().addAll(rundenNr);
     		
     		List<String> preise = dbm.getPreise();
     		preisWaehlenCombo.getItems().addAll(preise);
-    		
-    		List<String> serienNr = dbm.getSerien();
-    		serieWaehlenCombo.getItems().addAll(serienNr);
-    		
+
     		List<String> rundenTyp = dbm.getRundentyp();
     		rundentypWaehlenCombo.getItems().addAll(rundenTyp);
     		neuerRundentypWaehlenCombo.getItems().addAll(rundenTyp);
@@ -607,33 +645,105 @@ public class RootLayoutController implements Initializable {
 	
 	@FXML
 	private void addSerie(){
-		
+		DBManager dbm = new DBManager();
+		if(rundeWaehlenCombo.getSelectionModel().getSelectedItem() != "Runde wählen" || preisWaehlenCombo.getSelectionModel().getSelectedItem() != "Preis wählen" || serieWaehlen2Combo.getSelectionModel().getSelectedItem() !="Serie wählen"){
+    	try{    		
+    		dbm.addSerie(rundeWaehlenCombo.getSelectionModel().getSelectedItem(), serieWaehlen2Combo.getSelectionModel().getSelectedItem(), preisWaehlenCombo.getSelectionModel().getSelectedItem());
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}}
+		else{
+			System.out.println("Runde, Preis und Serie wählen!");
+		}
 	}
+	
+
 	@FXML
 	private void deleteSerie(){
-		
+		DBManager dbm = new DBManager();
+    	try{    	
+    		dbm.deleteSerie(serieWaehlenCombo.getSelectionModel().getSelectedItem(), rundeWaehlen4Combo.getSelectionModel().getSelectedItem());
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
 	}
 	@FXML
 	private void addRunde(){
-		
+		DBManager dbm = new DBManager();
+    	try{    	
+    		dbm.addRunde(rundentypWaehlenCombo.getSelectionModel().getSelectedItem());
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
 	}
 	@FXML
 	private void deleteRunde(){
-		
+		DBManager dbm = new DBManager();
+    	try{    	
+    		dbm.deleteRunde(rundeWaehlen2Combo.getSelectionModel().getSelectedItem());
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
 	}
 	@FXML
 	private void changeTyp(){
-		
+		DBManager dbm = new DBManager();
+    	try{    	
+    		dbm.changeRundenTyp(rundeWaehlen3Combo.getSelectionModel().getSelectedItem(), neuerRundentypWaehlenCombo.getSelectionModel().getSelectedItem());
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
 	}
 	@FXML
 	private void addPreis(){
 		DBManager dbm = new DBManager();
     	try{
     		dbm.addPreis(txtPreisErstellen.getText());
-    		
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
     	} catch(Exception e){
     		e.printStackTrace();
     	}
+	}
+	
+	private void clearCombos() {
+		// TODO Auto-generated method stub
+		rundeWaehlenCombo.getItems().clear();
+		preisWaehlenCombo.getItems().clear();
+		serieWaehlenCombo.getItems().clear();
+		serieWaehlen2Combo.getItems().clear();
+		rundentypWaehlenCombo.getItems().clear();
+		rundeWaehlen2Combo.getItems().clear();
+		rundeWaehlen3Combo.getItems().clear();
+		rundeWaehlen4Combo.getItems().clear();
+		neuerRundentypWaehlenCombo.getItems().clear();
+		txtPreisErstellen.clear();
+		rundeWaehlenCombo.setValue(null);
+		preisWaehlenCombo.setValue(null);
+		serieWaehlenCombo.setValue(null);
+		serieWaehlen2Combo.setValue(null);
+		rundentypWaehlenCombo.setValue(null);
+		rundeWaehlen2Combo.setValue(null);
+		rundeWaehlen3Combo.setValue(null);
+		rundeWaehlen4Combo.setValue(null);
+		neuerRundentypWaehlenCombo.setValue(null);
+		
 	}
 	
 	
