@@ -171,7 +171,12 @@ public class RootLayoutController implements Initializable {
 	private ComboBox<String> neuerRundentypWaehlenCombo;
 	@FXML
 	private TextField txtPreisErstellen;
-	
+	@FXML
+	private ComboBox<String> preisWaehlen2Combo;
+	@FXML
+	private ComboBox<String> preisWaehlen3Combo;
+	@FXML
+	private TextField txtPreisBearbeiten;
 	
   
 	
@@ -359,6 +364,12 @@ public class RootLayoutController implements Initializable {
 		          	}
 	          }    
 	      });
+		 preisWaehlen2Combo.valueProperty().addListener(new ChangeListener<String>() {
+		        @Override public void changed(ObservableValue ov, String t, String selectedPreis) {
+		              System.out.println(selectedPreis);
+		              txtPreisBearbeiten.setText(selectedPreis);     	
+		        }
+		      });
 		
     }
 	
@@ -597,7 +608,7 @@ public class RootLayoutController implements Initializable {
 					
 			}
     		 
-    		//System.out.println(serienForCurrentRunde.get(0).getPreis());
+
 			runden.set(i, (ArrayList) serienForCurrentRunde);
 		}
     	
@@ -608,7 +619,7 @@ public class RootLayoutController implements Initializable {
 	    
 	    for(int j = 1; j <= maxRunden; j++){
 	    	String rundenTypName = dbm.getRundenTypById(j);
-	    	//String rundenTypName = "test";
+
 	    	rundenList.add(new TreeItem<String>("RundenNr: " + j + " ("+rundenTypName+")")); //Runden Menuepunkte werden erstellt
 	    	rundenList.get(j-1).getChildren().addAll(runden.get(j)); //Serien werden den Runden hinzugefügt
 	    }
@@ -632,6 +643,8 @@ public class RootLayoutController implements Initializable {
     		
     		List<String> preise = dbm.getPreise();
     		preisWaehlenCombo.getItems().addAll(preise);
+    		preisWaehlen2Combo.getItems().addAll(preise);
+    		preisWaehlen3Combo.getItems().addAll(preise);
 
     		List<String> rundenTyp = dbm.getRundentyp();
     		rundentypWaehlenCombo.getItems().addAll(rundenTyp);
@@ -722,10 +735,39 @@ public class RootLayoutController implements Initializable {
     	}
 	}
 	
+	@FXML
+	private void editPreis(){
+		DBManager dbm = new DBManager();
+    	try{    	
+    		dbm.editPreis(preisWaehlen2Combo.getSelectionModel().getSelectedItem(),txtPreisBearbeiten.getText());
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
+	}
+	
+	@FXML
+	private void deletePreis(){
+		DBManager dbm = new DBManager();
+    	try{    	
+    		dbm.deletePreis(preisWaehlen3Combo.getSelectionModel().getSelectedItem());
+    		clearCombos();
+    		initializeCombos();
+    		createTree();
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
+	}
+	
+	
 	private void clearCombos() {
 		// TODO Auto-generated method stub
 		rundeWaehlenCombo.getItems().clear();
 		preisWaehlenCombo.getItems().clear();
+		preisWaehlen2Combo.getItems().clear();
+		preisWaehlen3Combo.getItems().clear();
 		serieWaehlenCombo.getItems().clear();
 		serieWaehlen2Combo.getItems().clear();
 		rundentypWaehlenCombo.getItems().clear();
@@ -734,8 +776,11 @@ public class RootLayoutController implements Initializable {
 		rundeWaehlen4Combo.getItems().clear();
 		neuerRundentypWaehlenCombo.getItems().clear();
 		txtPreisErstellen.clear();
+		txtPreisBearbeiten.clear();
 		rundeWaehlenCombo.setValue(null);
 		preisWaehlenCombo.setValue(null);
+		preisWaehlen2Combo.setValue(null);
+		preisWaehlen3Combo.setValue(null);
 		serieWaehlenCombo.setValue(null);
 		serieWaehlen2Combo.setValue(null);
 		rundentypWaehlenCombo.setValue(null);

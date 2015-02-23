@@ -650,6 +650,38 @@ public class DBManager {
 		return rundenTypName;
 	
 	}
+
+	public void deletePreis(String preis) {
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("delete Preis " + preis);
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "delete from preis where name='"+preis+"'";
+			
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error deleting Data");
+		}
+	}
+
+	public void editPreis(String oldPreis, String newPreis) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "update preis set name='" + newPreis	+ "' where name='" + oldPreis + "'";
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error updating Data");
+		}
+	}
 	
 	
 	
