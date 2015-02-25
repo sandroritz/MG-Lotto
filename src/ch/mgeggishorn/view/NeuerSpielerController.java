@@ -20,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -76,6 +77,7 @@ public class NeuerSpielerController implements Initializable {
 			Stage stage = new Stage();
 			Parent root = FXMLLoader.load(getClass().getResource("RootLayoutView.fxml"));
 			Scene scene = new Scene(root);
+			stage.getIcons().add(new Image("/mg-logo.jpg"));
 			stage.setScene(scene);
 			stage.show();
 			

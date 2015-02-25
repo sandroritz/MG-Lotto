@@ -17,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
@@ -25,15 +27,23 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ch.mgeggishorn.controller.DBManager;
 
 
+import ch.mgeggishorn.logger.Log;
+import ch.mgeggishorn.logger.LogView;
+import ch.mgeggishorn.logger.Logger;
 import ch.mgeggishorn.model.CurrentSpielerModel;
 import ch.mgeggishorn.model.RundenModel;
 import ch.mgeggishorn.model.SerieModel;
@@ -179,9 +189,15 @@ public class RootLayoutController implements Initializable {
 	@FXML
 	private TextField txtPreisBearbeiten;
 	
-
+	//Logging
+	Log log = new Log();
+	Logger logger = new Logger(log, "MG-Eggishorn: ");
+	enum Level { DEBUG, INFO, WARN, ERROR };
+	
 	
     public void initialize(URL url, ResourceBundle rb) {
+    	
+logger.info("Test");
     	
     	spieler = null;
     	selectedSpieler = null;
@@ -368,6 +384,8 @@ public class RootLayoutController implements Initializable {
 		              txtPreisBearbeiten.setText(selectedPreis);     	
 		        }
 		      });
+		 
+		 startLogger();
 		
     }
 	
@@ -792,6 +810,46 @@ public class RootLayoutController implements Initializable {
 		rundeWaehlen4Combo.setValue(null);
 		neuerRundentypWaehlenCombo.setValue(null);
 		
+	}
+	
+	//Logger
+	private void startLogger() {
+		// TODO Auto-generated method stub
+		
+		Stage logStage = new Stage();
+		
+		
+
+		logger.info("Hallo - Hier werden alle Aktionen geloggt.");
+
+		
+
+		LogView logView = new LogView(logger);
+		logView.setPrefWidth(1000);
+		logView.setPrefHeight(150);
+
+		ChoiceBox<Level> filterLevel = new ChoiceBox<>(
+				FXCollections.observableArrayList(Level.values()));
+		filterLevel.getSelectionModel().select(Level.DEBUG);
+		/*logView.filterLevelProperty().bind(
+				filterLevel.getSelectionModel().selectedItemProperty());
+*/
+		ToggleButton showTimestamp = new ToggleButton("Zeige Zeitstempel");
+		logView.showTimeStampProperty().bind(showTimestamp.selectedProperty());
+
+		HBox controls = new HBox(10, filterLevel, showTimestamp);
+		controls.setMinHeight(HBox.USE_PREF_SIZE);
+
+		VBox layout = new VBox(10, controls, logView);
+		VBox.setVgrow(logView, Priority.ALWAYS);
+
+		Scene scene = new Scene(layout);
+		scene.getStylesheets().add(
+				this.getClass().getResource("/log-view.css").toExternalForm());
+		logStage.setScene(scene);
+		logStage.getIcons().add(new Image("/mg-logo.jpg"));
+		logStage.setTitle("Lotto - Log");
+		logStage.show();
 	}
 	
 	
