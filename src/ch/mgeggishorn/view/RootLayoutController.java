@@ -150,6 +150,7 @@ public class RootLayoutController implements Initializable {
 	@FXML
 	private TreeView treeviewRunden;
 	private List<SerieModel> serien;
+	private List<RundenModel> allRunden;
 	
 	@FXML
 	private ComboBox<String> rundeWaehlenCombo;
@@ -178,9 +179,6 @@ public class RootLayoutController implements Initializable {
 	@FXML
 	private TextField txtPreisBearbeiten;
 	
-  
-	
-
 
 	
     public void initialize(URL url, ResourceBundle rb) {
@@ -475,10 +473,7 @@ public class RootLayoutController implements Initializable {
 	private void starteSpiel(){
 	
 	}
-	
-	
-	
-	
+
 	
 	//Helper Methoden
 	private void setDisableTrue() {
@@ -561,6 +556,7 @@ public class RootLayoutController implements Initializable {
     	return selectedKarte;
     }
     
+    
     //Serienverwaltung Funktionen
     
 	public void createTree() {
@@ -569,6 +565,7 @@ public class RootLayoutController implements Initializable {
 		DBManager dbm = new DBManager();
     	try{
     		serien = dbm.getAllSerien();
+    		
     		
     	} catch(Exception e){
     		e.printStackTrace();
@@ -700,15 +697,21 @@ public class RootLayoutController implements Initializable {
 	}
 	@FXML
 	private void deleteRunde(){
-		DBManager dbm = new DBManager();
-    	try{    	
-    		dbm.deleteRunde(rundeWaehlen2Combo.getSelectionModel().getSelectedItem());
-    		clearCombos();
-    		initializeCombos();
-    		createTree();
-    	} catch(Exception e){
-    		e.printStackTrace();
-    	}
+//		DBManager dbm = new DBManager();
+//
+//    	try{    	
+//    		int maxRunde = dbm.getMaxRundenNr();
+//
+//    		if((rundeWaehlen2Combo.getSelectionModel().getSelectedItem()) == (String.valueOf(maxRunde))){
+//	    		dbm.deleteRunde(rundeWaehlen2Combo.getSelectionModel().getSelectedItem());
+//	    		clearCombos();
+//	    		initializeCombos();
+//	    		createTree();
+//    		}
+//    	} catch(Exception e){
+//    		e.printStackTrace();
+//    	}
+		
 	}
 	@FXML
 	private void changeTyp(){

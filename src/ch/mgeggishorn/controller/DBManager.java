@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.mgeggishorn.model.CurrentSpielerModel;
+import ch.mgeggishorn.model.RundenModel;
 import ch.mgeggishorn.model.SerieModel;
 import ch.mgeggishorn.model.SpielerModel;
 
@@ -19,11 +20,14 @@ public class DBManager {
 	List<String> rundenNr = new ArrayList<>();
 	List<String> preise = new ArrayList<>();
 	List<String> serien = new ArrayList<>();
+	List<String> runden = new ArrayList<>();
 	List<String> rundentypen = new ArrayList<>();
 	List<Integer> fkpreis = new ArrayList<>();	
 	List<Integer> rundenTyp = new ArrayList<>();
 	List<Integer> neuerRundenTypen = new ArrayList<>();
 	List<Integer> maxRundenNr = new ArrayList<>();
+	List<Integer> countRundenNr = new ArrayList<>();
+	
 	List<Integer> usedSerieNr = new ArrayList<>();
 	List<String> NoUsedSerieNr = new ArrayList<>();
 	List<String> usedSerieNr2 = new ArrayList<>();
@@ -565,7 +569,7 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select max(RundenNr) as maxRundenNr from runde"); //Last/Max RundenNr
+			rs = s.executeQuery("select max(rundenNr) as maxRundenNr from runde"); //Last/Max RundenNr
 			if (rs != null) {
 				while (rs.next()) {
 					int rundenNr = rs.getInt("maxRundenNr");
@@ -580,6 +584,7 @@ public class DBManager {
 		}
 		return maxRundenNr.get(0);
 	}
+	
 
 	public void deleteRunde(String rundenNr) { //müssen noch Fremdschlüssel beziehungen implementiert werden fürs löschen
 		// TODO Auto-generated method stub
@@ -681,6 +686,30 @@ public class DBManager {
 			e.printStackTrace();
 			System.out.println("Error updating Data");
 		}
+	}
+
+	
+	public List<RundenModel> getAllRunden() {
+		// TODO Auto-generated method stub
+		List<RundenModel> runden = new ArrayList<RundenModel>();
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select runde.rundenNr as rundenNr, rundenTyp.name as name from runde, rundenTyp where runde.fkRundentyp = rundenTyp.id");
+			if (rs != null) {
+				while (rs.next()) {
+					int rundenNr = rs.getInt("rundenNr");
+					String typName = rs.getString("name");
+					runden.add(new RundenModel(rundenNr, typName));
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return runden;
 	}
 	
 	
