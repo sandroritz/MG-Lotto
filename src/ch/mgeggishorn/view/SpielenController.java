@@ -61,6 +61,8 @@ public class SpielenController implements Initializable {
 	@FXML
 	private Label lblPreis;
 	@FXML
+	private Label lblAnzVersuche;
+	@FXML
 	private Label lblGewinner;
 	@FXML
 	private TextField txtGetrillteeZahl;
@@ -68,36 +70,59 @@ public class SpielenController implements Initializable {
 	private TextField txtManuellGewinner;
 	@FXML
 	private CheckBox cboxManuell;
+	@FXML
+	private Button btnZahlBestaetigen;
+	
+	
+	
 
 	int rundenNr = 1;
 	int serienNr = 0;
 	String preis = "";
-	
+
+	int maxSerien = 0;
+	int countCurrentSerie = 1;
+	int anzVersuche=0;
+
+	List<SerieModel> serienliste;
+
+	boolean siegerIsSet = false;
+
 	public void initialize(URL url, ResourceBundle rb) {
-		
-		
-		
+		holeSerienListe();
+		getMaxSerien();
+
 		DBManager dbm = new DBManager();
 		try {
 			serienNr = dbm.getFirstSerie(rundenNr);
-			preis = dbm.getPreis(rundenNr,serienNr);
-		
-			
+			preis = dbm.getPreis(rundenNr, serienNr);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		lblRundenNr.setText("Runden Nr: 1");
-		lblSerieNr.setText("Serien Nr: "  + serienNr);
-		lblPreis.setText("Preis: " +preis);
+		lblSerieNr.setText("Serien Nr: " + serienNr);
+		lblPreis.setText("Preis: " + preis);
 	}
 
 	@FXML
-	private void zahlEnter() {
+	private void zahlBestaetigen() {
 		DBManager dbm = new DBManager();
 		int zahl = Integer.parseInt(txtGetrillteeZahl.getText());
 		try {
-			String txtGewinner = dbm.searchGewinner(zahl, rundenNr, serienNr);
-			lblGewinner.setText(txtGewinner);
+			if(txtGetrillteeZahl.getText() != ""){
+				String txtGewinner = dbm.searchGewinner(zahl, rundenNr, serienNr);
+				lblGewinner.setText(txtGewinner);
+				if (txtGewinner != "Kein Gewinner gefunden") {
+					siegerIsSet = true;	
+					btnZahlBestaetigen.setDisable(true);
+					cboxManuell.setDisable(true);
+				}
+				anzVersuche++;
+				lblAnzVersuche.setText("Anz. Versuche: " + anzVersuche);
+				txtGetrillteeZahl.setText("");
+				txtManuellGewinner.setText("");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,13 +130,25 @@ public class SpielenController implements Initializable {
 	}
 
 	@FXML
-	private void neuerVersuch() {
-
-	}
-
-	@FXML
 	private void serieAbschliessen() {
-		//Suche naechste Serie/runde
+		if (siegerIsSet) {
+			countCurrentSerie++;
+			rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
+			serienNr = serienliste.get(countCurrentSerie).getSerieNr();
+			preis = serienliste.get(countCurrentSerie).getPreis();
+			refreshStatusLabels(rundenNr, serienNr, preis);
+			// Labels clear
+			txtGetrillteeZahl.setText("");
+			lblGewinner.setText("Gewinner:");
+			txtManuellGewinner.setText("");
+			anzVersuche=0;
+			lblAnzVersuche.setText("Anz. Versuche: 0");
+			btnZahlBestaetigen.setDisable(false);
+			cboxManuell.setDisable(false);
+		} else {
+			System.out.println("Noch kein Sieger festgelegt");
+		}
+		siegerIsSet = false;
 	}
 
 	// Menuitems
@@ -130,4 +167,33 @@ public class SpielenController implements Initializable {
 
 	}
 
+	private void holeSerienListe() {
+		// TODO Auto-generated method stub
+		DBManager dbm = new DBManager();
+		try {
+			serienliste = dbm.holeSerienListe();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void getMaxSerien() {
+		DBManager dbm = new DBManager();
+		try {
+			if (dbm.getMaxSerien() != 0) {
+				maxSerien = dbm.getMaxSerien();
+			} else {
+				System.out.println("Fehler bei Max Serien Abfrage");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void refreshStatusLabels(int rundenNr, int serienNr, String preis) {
+		// TODO Auto-generated method stub
+		lblRundenNr.setText("Runden Nr: " + rundenNr);
+		lblSerieNr.setText("Serien Nr: " + serienNr);
+		lblPreis.setText("Preis: " + preis);
+	}
 }

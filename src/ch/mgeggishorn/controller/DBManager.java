@@ -32,9 +32,12 @@ public class DBManager {
 	List<String> NoUsedSerieNr = new ArrayList<>();
 	List<String> usedSerieNr2 = new ArrayList<>();
 	
+	
 	//SpielenView
 	int serienNr;
 	String preis;
+	
+	List<SerieModel> serienliste = new ArrayList<SerieModel>();
 	
 	
 	
@@ -835,6 +838,49 @@ public class DBManager {
 			System.out.println("Error updating Data");
 		}
 		
+	}
+
+	public List<SerieModel> holeSerienListe() {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select s.serienNr as serienNr,s.fkRundenNr as rundenNr, p.name as preis from serie as s, runde as r, preis as p where s.fkRundenNr = r.rundenNr and s.fkPreis  =p.id and s.fkRundenNr order by s.fkRundenNr, s.serienNr");
+			if (rs != null) {
+				while (rs.next()) {
+					int serienNr = rs.getInt("serienNr");
+					int rundenNr = rs.getInt("rundenNr");
+					String preis = rs.getString("preis");
+					serienliste.add(new SerieModel(serienNr, rundenNr, preis));
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return serienliste;
+	}
+
+	public int getMaxSerien() {
+		int maxSerie = 0;
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();	
+			ResultSet rs;
+			rs = s.executeQuery("select COUNT(serienNr) as maxSerie from serie");
+			if (rs != null) {
+				while (rs.next()) {
+					maxSerie = rs.getInt("maxSerie");
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return maxSerie;
 	}
 	
 }
