@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class CurrentSpielerModel {
 	private SimpleIntegerProperty id;
+	private SimpleIntegerProperty fkSpieler;
 	private SimpleStringProperty name;
 	private SimpleStringProperty vorname;
 	private SimpleStringProperty strasse;
@@ -16,9 +17,10 @@ public class CurrentSpielerModel {
 	private SimpleIntegerProperty karten;
 	private List<Integer> lottozahlen;
 	
-	public CurrentSpielerModel(int id, String name, String vorname,
+	public CurrentSpielerModel(int id, int fkSpieler, String name, String vorname,
 			String strasse, int plz, String ort, int karten) {
 		this.id= new SimpleIntegerProperty(id);
+		this.fkSpieler= new SimpleIntegerProperty(fkSpieler);
 		this.name = new SimpleStringProperty(name);
 		this.vorname = new SimpleStringProperty(vorname);
 		this.strasse = new SimpleStringProperty(strasse);
@@ -26,13 +28,18 @@ public class CurrentSpielerModel {
 		this.ort = new SimpleStringProperty(ort);
 		this.karten= new SimpleIntegerProperty(karten);
 	}
-	public CurrentSpielerModel(int id, String name, String vorname,String ort, int karten) {
-		this.id= new SimpleIntegerProperty(id);
+	
+	public CurrentSpielerModel(int fkSpieler, String name, String vorname,
+			String strasse, int plz, String ort,int karten) {
+		this.fkSpieler= new SimpleIntegerProperty(fkSpieler);
 		this.name = new SimpleStringProperty(name);
 		this.vorname = new SimpleStringProperty(vorname);
+		this.strasse = new SimpleStringProperty(strasse);
+		this.plz = new SimpleIntegerProperty(plz);
 		this.ort = new SimpleStringProperty(ort);
 		this.karten= new SimpleIntegerProperty(karten);
 	}
+	
 
 	public int getId() {
 		return id.get();
@@ -40,6 +47,13 @@ public class CurrentSpielerModel {
 
 	public void setId(int id) {
 		this.id.set(id);
+	}
+	public int getFkSpieler() {
+		return fkSpieler.get();
+	}
+
+	public void setFkSpieler(int fkSpieler) {
+		this.fkSpieler.set(fkSpieler);
 	}
 	public String getName() {
 		return name.get();

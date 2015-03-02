@@ -36,18 +36,23 @@ public class Main extends Application {
 	
 	@FXML
 	public void login() throws IOException {
-		// if(txtBenutzer.getText() == "demo" && txtPasswort.getText()=="demo"){
-		Stage stage = new Stage();
-		stage.getIcons().add(new Image("/mg-logo.jpg"));
-		Parent root = FXMLLoader.load(getClass().getResource(
-				"view/RootLayoutView.fxml"));
+		System.out.println(txtBenutzer.getText() + " " + txtPasswort.getText());
 		
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
-		// }
-		Stage stageToClose = (Stage) txtBenutzer.getScene().getWindow();
-		stageToClose.close();
+		if((txtBenutzer.getText().equals("demo")) && (txtPasswort.getText().equals("demo"))){
+			
+			Stage stage = new Stage();
+			stage.getIcons().add(new Image("/mg-logo.jpg"));
+			Parent root = FXMLLoader.load(getClass().getResource(
+					"view/RootLayoutView.fxml"));
+			
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.setTitle("MG - Lotto");
+			stage.show();
+			
+			Stage stageToClose = (Stage) txtBenutzer.getScene().getWindow();
+			stageToClose.close();
+		}
 
 	}
 	

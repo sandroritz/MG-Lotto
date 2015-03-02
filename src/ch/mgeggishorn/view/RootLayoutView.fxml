@@ -43,8 +43,7 @@
                                       </columns>
                                     </TableView>
                                     <TextField fx:id="txtSuche" layoutX="14.0" layoutY="14.0" promptText="Suche" />
-                                    <Button layoutX="177.0" layoutY="14.0" mnemonicParsing="false" onAction="#neuSpieler" text="Neu" />
-                                    <Button layoutX="227.0" layoutY="14.0" mnemonicParsing="false" onAction="#ladeDaten" text="Lade Daten" />
+                                    <Button layoutX="170.0" layoutY="14.0" mnemonicParsing="false" onAction="#refreshTable" text="Tabelle aktualisieren " />
                                  </children>
                               </AnchorPane>
                             <AnchorPane fx:id="detailAnchorPane" minHeight="0.0" prefHeight="683.0" prefWidth="319.0">
@@ -64,11 +63,30 @@
                                     <Label layoutX="23.0" layoutY="195.0" text="PLZ" />
                                     <TextField fx:id="txtOrt" disable="true" layoutX="115.0" layoutY="219.0" />
                                     <Label layoutX="23.0" layoutY="223.0" text="Ort" />
-                                    <Button layoutX="22.0" layoutY="258.0" mnemonicParsing="false" onAction="#bearbeiten" text="Bearbeiten" />
-                                    <Button layoutX="178.0" layoutY="258.0" mnemonicParsing="false" onAction="#loeschen" text="Löschen" />
-                                    <Button layoutX="102.0" layoutY="258.0" mnemonicParsing="false" onAction="#speichern" text="Speichern" />
+                                    <Button layoutX="51.0" layoutY="258.0" mnemonicParsing="false" onAction="#bearbeiten" text="Bearbeiten" />
+                                    <Button layoutX="130.0" layoutY="258.0" mnemonicParsing="false" onAction="#loeschen" text="Löschen" />
+                                    <Button layoutX="195.0" layoutY="258.0" mnemonicParsing="false" onAction="#speichern" text="Speichern" />
                                     <Label layoutX="23.0" layoutY="83.0" text="ID" />
                                     <TextField fx:id="txtId" disable="true" editable="false" layoutX="115.0" layoutY="79.0" />
+                                    <Label layoutX="13.0" layoutY="329.0" text="Spieler erfassen">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="19.0" layoutY="369.0" prefHeight="17.0" prefWidth="26.0" text="ID" />
+                                    <Label layoutX="19.0" layoutY="401.0" text="Name" />
+                                    <TextField fx:id="txtNeuName" layoutX="115.0" layoutY="397.0" />
+                                    <TextField fx:id="txtNeuId" disable="true" editable="false" layoutX="115.0" layoutY="365.0" />
+                                    <Label layoutX="19.0" layoutY="434.0" text="Vorname" />
+                                    <TextField fx:id="txtNeuVorname" layoutX="115.0" layoutY="430.0" />
+                                    <Label layoutX="20.0" layoutY="466.0" text="Strasse" />
+                                    <TextField fx:id="txtNeuStrasse" layoutX="115.0" layoutY="462.0" />
+                                    <Label layoutX="19.0" layoutY="501.0" text="PLZ" />
+                                    <TextField fx:id="txtNeuPlz" layoutX="115.0" layoutY="497.0" />
+                                    <Label layoutX="20.0" layoutY="534.0" text="Ort" />
+                                    <TextField fx:id="txtNeuOrt" layoutX="115.0" layoutY="530.0" />
+                                    <Button layoutX="195.0" layoutY="585.0" mnemonicParsing="false" onAction="#neuSpeichern" text="Speichern" />
+                                    <Separator layoutX="15.0" layoutY="308.0" prefHeight="1.0" prefWidth="247.0" />
                                  </children>
                               </AnchorPane>
                           </items>

@@ -41,6 +41,7 @@ import javafx.stage.Stage;
 import ch.mgeggishorn.controller.DBManager;
 
 
+import ch.mgeggishorn.controller.Zahlenreihe;
 import ch.mgeggishorn.logger.Log;
 import ch.mgeggishorn.logger.LogView;
 import ch.mgeggishorn.logger.Logger;
@@ -79,6 +80,22 @@ public class RootLayoutController implements Initializable {
 	private TextField txtOrt;	
 	
 	private boolean disable = true;
+	
+	//Spieler erfassen
+	@FXML
+	private TextField txtNeuId;
+	@FXML
+	private TextField txtNeuName;
+	@FXML
+	private TextField txtNeuVorname;
+	@FXML
+	private TextField txtNeuStrasse;
+	@FXML
+	private TextField txtNeuPlz;
+	@FXML
+	private TextField txtNeuOrt;	
+
+	int lastSpielerId;
 	
 	
 	//Splitpane
@@ -197,7 +214,13 @@ public class RootLayoutController implements Initializable {
 	
     public void initialize(URL url, ResourceBundle rb) {
     	
-logger.info("Test");
+    	//Zufallszahlen	
+    	Zahlenreihe reihe = new Zahlenreihe();
+    	reihe.printAllNumber();
+    	reihe.printSaalNumber();
+
+    	
+    	logger.info("Test");
     	
     	spieler = null;
     	selectedSpieler = null;
@@ -205,10 +228,13 @@ logger.info("Test");
     	createTree();
     	initializeCombos();
     	
+   
     	DBManager dbm = new DBManager();
     	try{
     		spieler = dbm.getAllSpielerOverView();
     		selectedSpieler = dbm.getAllCurrentSpieler();
+    		lastSpielerId = dbm.getLastId();
+    		txtNeuId.setText(String.valueOf(++lastSpielerId)); //Id fuer neuen Spieler
     	} catch(Exception e){
     		e.printStackTrace();
     	}
@@ -253,9 +279,6 @@ logger.info("Test");
 		
 		tblSelectedSpieler.setItems(selectedData);
 		
-		
-
-    	
     	
     	tblOverview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SpielerModel>() {
     		@Override
@@ -388,14 +411,9 @@ logger.info("Test");
 		 startLogger();
 		
     }
-	
+
 	@FXML
-	private void neuSpieler() throws IOException {
-	    AnchorPane neuerSpielerView = (AnchorPane)FXMLLoader.load(getClass().getResource("NeuerSpielerView.fxml"));
-	    mainSplitPane.getItems().set(1, neuerSpielerView);
-	}
-	@FXML
-	private void ladeDaten() {
+	private void refreshTable() {
 		refreshTableView();
 		txtSuche.setText("");
 	}
@@ -444,11 +462,37 @@ logger.info("Test");
                 clearDetail();
                 refreshTableView();  
                 setDisableFalse();
-	    	} catch(Exception e){
-	    		e.printStackTrace();
-	    	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
+	@FXML
+	private void neuSpeichern() {
+		DBManager dbm = new DBManager();
+		SpielerModel neuSpieler = new SpielerModel(Integer.parseInt(txtNeuId
+				.getText()), txtNeuName.getText(), txtNeuVorname.getText(),
+				txtNeuStrasse.getText(), Integer.parseInt(txtNeuPlz.getText()),
+				txtNeuOrt.getText());
+
+		try {
+			dbm.insertSpieler(neuSpieler);			
+			
+			// Detailfelder füllen
+			txtNeuId.setText(String.valueOf(neuSpieler.getId()));
+			txtNeuName.setText(neuSpieler.getName());
+			txtNeuVorname.setText(neuSpieler.getVorname());
+			txtNeuStrasse.setText(neuSpieler.getStrasse());
+			txtNeuPlz.setText(String.valueOf(neuSpieler.getPlz()));
+			txtNeuOrt.setText(neuSpieler.getOrt());
+			clearDetail();
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	
 	@FXML
@@ -468,12 +512,12 @@ logger.info("Test");
 	
 	@FXML
 	private void deleteCurrentSpieler(){
-		int id = 0;
-		id=tblSelectedSpieler.getSelectionModel().getSelectedItem().getId();
+		int fkSpieler = 0;
+		fkSpieler=tblSelectedSpieler.getSelectionModel().getSelectedItem().getFkSpieler();
 		DBManager dbm = new DBManager();
     	try{
-    		dbm.deleteCurrentSpieler(id);
-    		id--;
+    		dbm.deleteCurrentSpieler(fkSpieler);
+    		fkSpieler--;
     		refreshCurrentSpielerTableView();
     		if(!tblSelectedSpieler.getSelectionModel().isEmpty()){
     			tblSelectedSpieler.getSelectionModel().selectFirst();
@@ -488,8 +532,18 @@ logger.info("Test");
 	//Spiel starten
 	
 	@FXML
-	private void starteSpiel(){
-	
+	private void starteSpiel() throws IOException{
+		Stage stage = new Stage(); 
+		stage.getIcons().add(new Image("/mg-logo.jpg"));
+		Parent root = FXMLLoader.load(getClass().getResource(
+				"SpielenView.fxml"));
+		
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.setTitle("MG - Lotto");
+		stage.show();
+		
+		txtId.getScene().getWindow().hide();
 	}
 
 	
@@ -564,6 +618,12 @@ logger.info("Test");
         txtStrasse.setText("");
         txtPlz.setText("");
         txtOrt.setText("");
+        txtNeuId.setText("");
+        txtNeuName.setText("");
+        txtNeuVorname.setText("");
+        txtNeuStrasse.setText("");
+        txtNeuPlz.setText("");
+        txtNeuOrt.setText("");
     }
    
     
@@ -600,10 +660,7 @@ logger.info("Test");
     		runden.add(new ArrayList<>());
     	}
     	
-   
-    	
-  
-    	
+
     	for(int i = rundeNr; i <= maxRunden;i++){
     		serienForCurrentRunde = null;
 			serienForCurrentRunde = new ArrayList<TreeItem<String>>();
@@ -845,10 +902,12 @@ logger.info("Test");
 
 		Scene scene = new Scene(layout);
 		scene.getStylesheets().add(
-				this.getClass().getResource("/log-view.css").toExternalForm());
+				this.getClass().getResource("log-view.css").toExternalForm());
 		logStage.setScene(scene);
 		logStage.getIcons().add(new Image("/mg-logo.jpg"));
 		logStage.setTitle("Lotto - Log");
+//		logStage.setX(0);
+//		logStage.setY(0);
 		logStage.show();
 	}
 	

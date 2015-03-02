@@ -32,6 +32,9 @@ public class DBManager {
 	List<String> NoUsedSerieNr = new ArrayList<>();
 	List<String> usedSerieNr2 = new ArrayList<>();
 	
+	//SpielenView
+	int serienNr;
+	String preis;
 	
 	
 	
@@ -226,29 +229,55 @@ public class DBManager {
 	
 	}
 
+
+	
+	/**
+	 * Überprüfe ob Spieler schon vorhanden
+	 * 
+	 * 
+	 * @param currentSpieler
+	 */
 	public void insertCurrentSpieler(CurrentSpielerModel currentSpieler) {
+		
+		
 		// TODO Auto-generated method stub
 				try {
 					System.out.println("insertSpieler");
 					con = DBConnector.getConnected();
 					Statement s = con.createStatement();
-					String query = "insert into currentSpieler ('id','name', 'vorname', 'strasse', 'plz', 'ort', 'karten') values ("
-							+ currentSpieler.getId()
-							+ ", '"
-							+ currentSpieler.getName()
-							+ "', '"
-							+ currentSpieler.getVorname()
-							+ "', '"
-							+ currentSpieler.getStrasse()
-							+ "', "
-							+ currentSpieler.getPlz()
-							+ ", '" + 
-							currentSpieler.getOrt()
-							+ "', " + 
-							currentSpieler.getKarten() + ")";
+					int id=0;
+					ResultSet rs;
+					rs = s.executeQuery("select fkSpieler from currentSpieler where fkSpieler=" + currentSpieler.getFkSpieler());
+					if (rs != null) {
+						while (rs.next()) {
+							id = rs.getInt("fkSpieler");
+						}
+					}
 					
-					System.out.println(query);
-					s.execute(query);
+					
+					if(id == 0){
+						String query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten') values ("
+								+ currentSpieler.getFkSpieler()
+								+ ", '"
+								+ currentSpieler.getName()
+								+ "', '"
+								+ currentSpieler.getVorname()
+								+ "', '"
+								+ currentSpieler.getStrasse()
+								+ "', "
+								+ currentSpieler.getPlz()
+								+ ", '" + 
+								currentSpieler.getOrt()
+								+ "', " + 
+								currentSpieler.getKarten() + ")";
+						
+						System.out.println(query);
+						s.execute(query);
+						
+					}
+					else{
+						System.out.println("Spieler ist bereits hinzugefügt.");
+					}
 					con.close();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -266,16 +295,19 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select id, name, vorname, ort, karten from currentSpieler");
+			rs = s.executeQuery("select id, fkSpieler, name, vorname, strasse, plz, ort, karten from currentSpieler");
 			if (rs != null) {
 				while (rs.next()) {
 					int id = rs.getInt("id");
+					int fkSpieler = rs.getInt("fkSpieler");
 					String name = rs.getString("name");
 					String vorname = rs.getString("vorname");
+					String strasse = rs.getString("strasse");
+					int plz = rs.getInt("plz");
 					String ort = rs.getString("ort");
 					int karten = rs.getInt("karten");
 					
-					currentSpielerData.add(new CurrentSpielerModel(id, name, vorname, ort, karten));
+					currentSpielerData.add(new CurrentSpielerModel(id, fkSpieler, name, vorname, strasse, plz, ort, karten));
 				}
 			}
 			con.close();
@@ -286,13 +318,13 @@ public class DBManager {
 		return currentSpielerData;
 	}
 	
-	public void deleteCurrentSpieler(int id) {
+	public void deleteCurrentSpieler(int fkSpieler) {
 		// TODO Auto-generated method stub
 				try {
 					System.out.println("delete Current Spieler");
 					con = DBConnector.getConnected();
 					Statement s = con.createStatement();
-					String query = "delete from currentSpieler where id="+id;
+					String query = "delete from currentSpieler where fkSpieler="+fkSpieler;
 					System.out.println(query);
 					s.execute(query);
 					con.close();
@@ -711,7 +743,98 @@ public class DBManager {
 		}
 		return runden;
 	}
+
 	
+	//SpielenView
 	
+
+	public int getFirstSerie(int rundenNr) {
+		// TODO Auto-generated method stub
+		
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select serienNr from serie, runde where serie.fkRundenNr = runde.rundenNr and serie.fkRundenNr ="+rundenNr+" limit 1");
+			if (rs != null) {
+				while (rs.next()) {
+					serienNr = rs.getInt("serienNr");
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return serienNr;
+	}
+
+	public String getPreis(int rundenNr, int serienNr) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select preis.name as preisname from preis,serie,runde where serie.fkRundenNr = runde.rundenNr and serie.fkPreis = preis.id and runde.rundenNr ="+ rundenNr+ " and serie.serienNr ="+ serienNr);
+			if (rs != null) {
+				while (rs.next()) {
+					preis = rs.getString("preisname");
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return preis;
+	}
+
+	public String searchGewinner(int zahl, int rundenNr, int serienNr) {
+		// TODO Auto-generated method stub
+		String txtGewinner = "Kein Gewinner gefunden";
+		int spielerId = 0;
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+		
+			rs = s.executeQuery("select cur.fkSpieler as fkSpieler,s.name as name, s.vorname as vorname, s.strasse as strasse, s.plz as plz, s.ort as ort from currentSpieler as cur,spieler as s where cur.fkSpieler = s.id and cur.lottozahl ="+zahl);
+			if (rs != null) {
+				while (rs.next()) {
+					spielerId = rs.getInt("fkSpieler");
+					String name = rs.getString("name");
+					String vorname = rs.getString("vorname");
+					String strasse = rs.getString("strasse");
+					int plz = rs.getInt("plz");
+					String ort = rs.getString("ort");
+					txtGewinner = name + ", " + vorname +", " + strasse + ", " + plz + " " + ort;
+				}
+			}
+			if(spielerId != 0){
+				updateGewinner(spielerId, rundenNr, serienNr);
+			}
+			
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return txtGewinner;
+	}
+	
+	public void updateGewinner(int spielerId, int rundenNr, int serienNr) {
+		
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "update serie set sieger="+ spielerId +" where fkRundenNr="+rundenNr+" and serienNr ="+serienNr;
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error updating Data");
+		}
+		
+	}
 	
 }
