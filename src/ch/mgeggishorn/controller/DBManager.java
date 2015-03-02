@@ -298,7 +298,7 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select id, fkSpieler, name, vorname, strasse, plz, ort, karten from currentSpieler");
+			rs = s.executeQuery("select id, fkSpieler, name, vorname, strasse, plz, ort, karten from currentSpieler group by fkSpieler");
 			if (rs != null) {
 				while (rs.next()) {
 					int id = rs.getInt("id");
