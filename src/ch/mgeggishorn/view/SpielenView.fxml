@@ -44,7 +44,7 @@
                </font>
             </Label>
             <CheckBox fx:id="cboxManuell" layoutX="18.0" layoutY="192.0" mnemonicParsing="false" text="manuell festlegen" />
-            <TextField fx:id="txtManuellGewinner" disable="true" layoutX="152.0" layoutY="188.0" prefHeight="25.0" prefWidth="167.0" text="Gewinner eingeben..." />
+            <TextField fx:id="txtManuellGewinner" disable="true" layoutX="152.0" layoutY="188.0" prefHeight="25.0" prefWidth="167.0" promptText="Gewinner eingeben..." />
             <Button layoutX="206.0" layoutY="236.0" mnemonicParsing="false" onAction="#serieAbschliessen" prefHeight="25.0" prefWidth="112.0" text="Serie abschliessen" />
             <Label fx:id="lblAnzVersuche" layoutX="152.0" layoutY="138.0" text="Anz. Versuche: 0" />
          </children>

@@ -214,11 +214,7 @@ public class RootLayoutController implements Initializable {
 	
     public void initialize(URL url, ResourceBundle rb) {
     	
-    	//Zufallszahlen	
-    	Zahlenreihe reihe = new Zahlenreihe();
-    	reihe.printAllNumber();
-    	reihe.printSaalNumber();
-
+    	
     	
     	logger.info("Test");
     	

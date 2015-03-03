@@ -72,37 +72,42 @@ public class SpielenController implements Initializable {
 	private CheckBox cboxManuell;
 	@FXML
 	private Button btnZahlBestaetigen;
-	
-	
-	
 
-	int rundenNr = 1;
+	int rundenNr = 0;
 	int serienNr = 0;
 	String preis = "";
 
 	int maxSerien = 0;
-	int countCurrentSerie = 1;
-	int anzVersuche=0;
+	int countCurrentSerie = 0;
+	int anzVersuche = 0;
 
 	List<SerieModel> serienliste;
 
 	boolean siegerIsSet = false;
 
 	public void initialize(URL url, ResourceBundle rb) {
+		serienliste = new ArrayList<SerieModel>();
 		holeSerienListe();
 		getMaxSerien();
+		if (countCurrentSerie <= maxSerien) {
+			rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
+			serienNr = serienliste.get(countCurrentSerie).getSerieNr();
+			preis = serienliste.get(countCurrentSerie).getPreis();
 
-		DBManager dbm = new DBManager();
-		try {
-			serienNr = dbm.getFirstSerie(rundenNr);
-			preis = dbm.getPreis(rundenNr, serienNr);
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			refreshStatusLabels(rundenNr, serienNr, preis);
 		}
-		lblRundenNr.setText("Runden Nr: 1");
-		lblSerieNr.setText("Serien Nr: " + serienNr);
-		lblPreis.setText("Preis: " + preis);
+		cboxManuell.selectedProperty().addListener(
+				new ChangeListener<Boolean>() {
+					public void changed(ObservableValue<? extends Boolean> ov,
+							Boolean old_val, Boolean new_val) {
+						if (old_val == false && new_val == true) {
+							txtManuellGewinner.setDisable(false);
+						} else if (old_val == true && new_val == false) {
+							txtManuellGewinner.setDisable(true);
+						}
+					}
+				});
+
 	}
 
 	@FXML
@@ -110,12 +115,14 @@ public class SpielenController implements Initializable {
 		DBManager dbm = new DBManager();
 		int zahl = Integer.parseInt(txtGetrillteeZahl.getText());
 		try {
-			if(txtGetrillteeZahl.getText() != ""){
-				String txtGewinner = dbm.searchGewinner(zahl, rundenNr, serienNr);
+			if (txtGetrillteeZahl.getText() != "") {
+				String txtGewinner = dbm.searchGewinner(zahl, rundenNr,
+						serienNr);
 				lblGewinner.setText(txtGewinner);
 				if (txtGewinner != "Kein Gewinner gefunden") {
-					siegerIsSet = true;	
+					siegerIsSet = true;
 					btnZahlBestaetigen.setDisable(true);
+					txtManuellGewinner.setDisable(true);
 					cboxManuell.setDisable(true);
 				}
 				anzVersuche++;
@@ -133,18 +140,50 @@ public class SpielenController implements Initializable {
 	private void serieAbschliessen() {
 		if (siegerIsSet) {
 			countCurrentSerie++;
-			rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
-			serienNr = serienliste.get(countCurrentSerie).getSerieNr();
-			preis = serienliste.get(countCurrentSerie).getPreis();
-			refreshStatusLabels(rundenNr, serienNr, preis);
-			// Labels clear
-			txtGetrillteeZahl.setText("");
-			lblGewinner.setText("Gewinner:");
-			txtManuellGewinner.setText("");
-			anzVersuche=0;
-			lblAnzVersuche.setText("Anz. Versuche: 0");
-			btnZahlBestaetigen.setDisable(false);
-			cboxManuell.setDisable(false);
+
+			if (countCurrentSerie < maxSerien) {
+				rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
+				serienNr = serienliste.get(countCurrentSerie).getSerieNr();
+				preis = serienliste.get(countCurrentSerie).getPreis();
+				refreshStatusLabels(rundenNr, serienNr, preis);
+				// Labels clear
+				txtGetrillteeZahl.setText("");
+				lblGewinner.setText("Gewinner:");
+				txtManuellGewinner.setText("");
+				anzVersuche = 0;
+				lblAnzVersuche.setText("Anz. Versuche: 0");
+				btnZahlBestaetigen.setDisable(false);
+				txtManuellGewinner.setDisable(false);
+				cboxManuell.setDisable(false);
+				cboxManuell.selectedProperty().set(false);
+			} else {
+				System.out.println("Alle Serien gespielt");
+			}
+		} else if (!siegerIsSet && txtManuellGewinner.getLength() > 6) {
+			DBManager dbm = new DBManager();
+			dbm.setManuellerGewinner(txtManuellGewinner.getText(), rundenNr,
+					serienNr);
+
+			countCurrentSerie++;
+
+			if (countCurrentSerie < maxSerien) {
+				rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
+				serienNr = serienliste.get(countCurrentSerie).getSerieNr();
+				preis = serienliste.get(countCurrentSerie).getPreis();
+				refreshStatusLabels(rundenNr, serienNr, preis);
+				// Labels clear
+				txtGetrillteeZahl.setText("");
+				lblGewinner.setText("Gewinner:");
+				txtManuellGewinner.setText("");
+				anzVersuche = 0;
+				lblAnzVersuche.setText("Anz. Versuche: 0");
+				btnZahlBestaetigen.setDisable(false);
+				txtManuellGewinner.setDisable(false);
+				cboxManuell.setDisable(false);
+				cboxManuell.selectedProperty().set(false);
+			} else {
+				System.out.println("Alle Serien gespielt");
+			}
 		} else {
 			System.out.println("Noch kein Sieger festgelegt");
 		}
@@ -153,12 +192,32 @@ public class SpielenController implements Initializable {
 
 	// Menuitems
 	@FXML
-	private void closeSpiel() {
+	private void closeSpiel() throws IOException {
+		Stage stageToClose = (Stage) btnZahlBestaetigen.getScene().getWindow();
+		stageToClose.close();
 
+		Stage stage = new Stage();
+		stage.getIcons().add(new Image("/mg-logo.jpg"));
+		Parent root = FXMLLoader.load(getClass().getResource(
+				"RootLayoutView.fxml"));
+
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.setTitle("MG - Lotto");
+		stage.show();
 	}
 
 	@FXML
 	private void zahlenZuweisen() {
+		// Zufallszahlen
+		Zahlenreihe reihe = new Zahlenreihe();
+
+		DBManager dbm = new DBManager();
+		try {
+			dbm.setLottozahlen(reihe.createPCNumberList());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

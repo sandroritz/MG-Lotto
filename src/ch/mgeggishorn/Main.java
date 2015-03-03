@@ -38,7 +38,7 @@ public class Main extends Application {
 	public void login() throws IOException {
 		System.out.println(txtBenutzer.getText() + " " + txtPasswort.getText());
 		
-		if((txtBenutzer.getText().equals("demo")) && (txtPasswort.getText().equals("demo"))){
+//		if((txtBenutzer.getText().equals("demo")) && (txtPasswort.getText().equals("demo"))){
 			
 			Stage stage = new Stage();
 			stage.getIcons().add(new Image("/mg-logo.jpg"));
@@ -54,7 +54,7 @@ public class Main extends Application {
 			stageToClose.close();
 		}
 
-	}
+//	}
 	
 
 	@Override

@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import ch.mgeggishorn.model.CurrentSpielerModel;
 import ch.mgeggishorn.model.RundenModel;
@@ -13,7 +16,7 @@ import ch.mgeggishorn.model.SpielerModel;
 
 public class DBManager {
 	private static Connection con;
-	
+
 	List<SpielerModel> spielerData = new ArrayList<>();
 	List<SpielerModel> spielerDataOf = new ArrayList<>();
 	List<CurrentSpielerModel> currentSpielerData = new ArrayList<>();
@@ -22,31 +25,30 @@ public class DBManager {
 	List<String> serien = new ArrayList<>();
 	List<String> runden = new ArrayList<>();
 	List<String> rundentypen = new ArrayList<>();
-	List<Integer> fkpreis = new ArrayList<>();	
+	List<Integer> fkpreis = new ArrayList<>();
 	List<Integer> rundenTyp = new ArrayList<>();
 	List<Integer> neuerRundenTypen = new ArrayList<>();
 	List<Integer> maxRundenNr = new ArrayList<>();
 	List<Integer> countRundenNr = new ArrayList<>();
-	
+
 	List<Integer> usedSerieNr = new ArrayList<>();
 	List<String> NoUsedSerieNr = new ArrayList<>();
 	List<String> usedSerieNr2 = new ArrayList<>();
-	
-	
-	//SpielenView
+
+	// SpielenView
 	int serienNr;
 	String preis;
-	
+
 	List<SerieModel> serienliste = new ArrayList<SerieModel>();
-	
-	
-	
-	
-/**
- * Gibt die Daten von einem gewissen SpielerId zurueck
- * @param spieler
- * @return
- */
+
+	HashMap<Integer, Integer> spielerAnzKartenList = new HashMap<Integer, Integer>();
+
+	/**
+	 * Gibt die Daten von einem gewissen SpielerId zurueck
+	 * 
+	 * @param spieler
+	 * @return
+	 */
 	public List<SpielerModel> getDetailOfSpieler(int spielerId) {
 
 		try {
@@ -54,8 +56,8 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select * from spieler where id='"
-					+ spielerId + "'");
+			rs = s.executeQuery("select * from spieler where id='" + spielerId
+					+ "'");
 
 			if (rs != null) {
 				while (rs.next()) {
@@ -84,6 +86,7 @@ public class DBManager {
 
 	/**
 	 * Gibt Daten für TableView zuruck
+	 * 
 	 * @return
 	 */
 	public List<SpielerModel> getAllSpielerOverView() {
@@ -100,7 +103,8 @@ public class DBManager {
 					String strasse = rs.getString("strasse");
 					int plz = rs.getInt("plz");
 					String ort = rs.getString("ort");
-					spielerData.add(new SpielerModel(id, name, vorname,strasse, plz, ort));
+					spielerData.add(new SpielerModel(id, name, vorname,
+							strasse, plz, ort));
 				}
 			}
 			con.close();
@@ -113,6 +117,7 @@ public class DBManager {
 
 	/**
 	 * Spieler bearbeiten
+	 * 
 	 * @param spieler
 	 */
 	public void updateSpieler(SpielerModel spieler) {
@@ -136,6 +141,7 @@ public class DBManager {
 
 	/**
 	 * Neuen Spieler hinzufügen
+	 * 
 	 * @param spieler
 	 */
 	public void insertSpieler(SpielerModel spieler) {
@@ -154,7 +160,9 @@ public class DBManager {
 					+ spieler.getStrasse()
 					+ "', "
 					+ spieler.getPlz()
-					+ ", '" + spieler.getOrt() + "')";
+					+ ", '"
+					+ spieler.getOrt()
+					+ "')";
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -169,7 +177,7 @@ public class DBManager {
 		try {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "delete from spieler where id="+id;
+			String query = "delete from spieler where id=" + id;
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -181,12 +189,30 @@ public class DBManager {
 
 	public List<SpielerModel> getSpielerByName(String searchQuery) {
 		try {
-			
+
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			System.out.println("select id, name, vorname, strasse, plz, ort from spieler where name like'%" + searchQuery + "%' or vorname like'%" + searchQuery + "%' or strasse like'%" + searchQuery + "%' or plz like'%" + searchQuery + "%' or ort like'%" + searchQuery + "%'");
-			rs = s.executeQuery("select id, name, vorname, strasse, plz, ort from spieler where name like '%" + searchQuery + "%' or vorname like '%" + searchQuery + "%' or strasse like '%" + searchQuery + "%' or plz like '%" + searchQuery + "%' or ort like '%" + searchQuery + "%'");
+			System.out
+					.println("select id, name, vorname, strasse, plz, ort from spieler where name like'%"
+							+ searchQuery
+							+ "%' or vorname like'%"
+							+ searchQuery
+							+ "%' or strasse like'%"
+							+ searchQuery
+							+ "%' or plz like'%"
+							+ searchQuery
+							+ "%' or ort like'%" + searchQuery + "%'");
+			rs = s.executeQuery("select id, name, vorname, strasse, plz, ort from spieler where name like '%"
+					+ searchQuery
+					+ "%' or vorname like '%"
+					+ searchQuery
+					+ "%' or strasse like '%"
+					+ searchQuery
+					+ "%' or plz like '%"
+					+ searchQuery
+					+ "%' or ort like '%"
+					+ searchQuery + "%'");
 			spielerData.clear();
 			if (rs != null) {
 				while (rs.next()) {
@@ -196,7 +222,8 @@ public class DBManager {
 					String strasse = rs.getString("strasse");
 					int plz = rs.getInt("plz");
 					String ort = rs.getString("ort");
-					spielerData.add(new SpielerModel(id, name, vorname, strasse, plz, ort));
+					spielerData.add(new SpielerModel(id, name, vorname,
+							strasse, plz, ort));
 				}
 			}
 			con.close();
@@ -206,19 +233,19 @@ public class DBManager {
 		}
 		return spielerData;
 	}
-	
-	public int getLastId(){
+
+	public int getLastId() {
 		int id = 0;
 		try {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("select max(id) as id from spieler");
-			
+
 			if (rs != null) {
-				
+
 				while (rs.next()) {
-					id= rs.getInt("id");
+					id = rs.getInt("id");
 					System.out.println(rs.getInt("id"));
 				}
 
@@ -229,11 +256,9 @@ public class DBManager {
 			System.out.println("Error on Building Data");
 		}
 		return id;
-	
+
 	}
 
-
-	
 	/**
 	 * Überprüfe ob Spieler schon vorhanden
 	 * 
@@ -241,56 +266,54 @@ public class DBManager {
 	 * @param currentSpieler
 	 */
 	public void insertCurrentSpieler(CurrentSpielerModel currentSpieler) {
-		
-		
+
 		// TODO Auto-generated method stub
-				try {
-					System.out.println("insertSpieler");
-					con = DBConnector.getConnected();
-					Statement s = con.createStatement();
-					int id=0;
-					ResultSet rs;
-					rs = s.executeQuery("select fkSpieler from currentSpieler where fkSpieler=" + currentSpieler.getFkSpieler());
-					if (rs != null) {
-						while (rs.next()) {
-							id = rs.getInt("fkSpieler");
-						}
-					}
-					
-					
-					if(id == 0){
-						String query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten') values ("
-								+ currentSpieler.getFkSpieler()
-								+ ", '"
-								+ currentSpieler.getName()
-								+ "', '"
-								+ currentSpieler.getVorname()
-								+ "', '"
-								+ currentSpieler.getStrasse()
-								+ "', "
-								+ currentSpieler.getPlz()
-								+ ", '" + 
-								currentSpieler.getOrt()
-								+ "', " + 
-								currentSpieler.getKarten() + ")";
-						
-						System.out.println(query);
-						s.execute(query);
-						
-					}
-					else{
-						System.out.println("Spieler ist bereits hinzugefügt.");
-					}
-					con.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.out.println("Error inserting Data");
+		try {
+			System.out.println("insertSpieler");
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			int id = 0;
+			ResultSet rs;
+			rs = s.executeQuery("select fkSpieler from currentSpieler where fkSpieler="
+					+ currentSpieler.getFkSpieler());
+			if (rs != null) {
+				while (rs.next()) {
+					id = rs.getInt("fkSpieler");
 				}
+			}
+
+			if (id == 0) {
+				String query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten') values ("
+						+ currentSpieler.getFkSpieler()
+						+ ", '"
+						+ currentSpieler.getName()
+						+ "', '"
+						+ currentSpieler.getVorname()
+						+ "', '"
+						+ currentSpieler.getStrasse()
+						+ "', "
+						+ currentSpieler.getPlz()
+						+ ", '"
+						+ currentSpieler.getOrt()
+						+ "', "
+						+ currentSpieler.getKarten() + ")";
+
+				System.out.println(query);
+				s.execute(query);
+
+			} else {
+				System.out.println("Spieler ist bereits hinzugefügt.");
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error inserting Data");
+		}
 	}
-	
-	
+
 	/**
 	 * Gibt Daten für TableView zuruck
+	 * 
 	 * @return
 	 */
 	public List<CurrentSpielerModel> getAllCurrentSpieler() {
@@ -309,8 +332,10 @@ public class DBManager {
 					int plz = rs.getInt("plz");
 					String ort = rs.getString("ort");
 					int karten = rs.getInt("karten");
-					
-					currentSpielerData.add(new CurrentSpielerModel(id, fkSpieler, name, vorname, strasse, plz, ort, karten));
+
+					currentSpielerData
+							.add(new CurrentSpielerModel(id, fkSpieler, name,
+									vorname, strasse, plz, ort, karten));
 				}
 			}
 			con.close();
@@ -320,25 +345,26 @@ public class DBManager {
 		}
 		return currentSpielerData;
 	}
-	
+
 	public void deleteCurrentSpieler(int fkSpieler) {
 		// TODO Auto-generated method stub
-				try {
-					System.out.println("delete Current Spieler");
-					con = DBConnector.getConnected();
-					Statement s = con.createStatement();
-					String query = "delete from currentSpieler where fkSpieler="+fkSpieler;
-					System.out.println(query);
-					s.execute(query);
-					con.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.out.println("Error inserting Data");
-				}
+		try {
+			System.out.println("delete Current Spieler");
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "delete from currentSpieler where fkSpieler="
+					+ fkSpieler;
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error inserting Data");
+		}
 	}
 
-	//Serienverwaltung
-	
+	// Serienverwaltung
+
 	public List<SerieModel> getAllSerien() {
 		// TODO Auto-generated method stub
 		List<SerieModel> serien = new ArrayList<SerieModel>();
@@ -352,8 +378,7 @@ public class DBManager {
 					int serienNr = rs.getInt("serienNr");
 					int rundenNr = rs.getInt("fkRundenNr");
 					String preis = rs.getString("preis");
-					
-					
+
 					serien.add(new SerieModel(serienNr, rundenNr, preis));
 				}
 			}
@@ -365,16 +390,16 @@ public class DBManager {
 		return serien;
 	}
 
-	//Serienverwaltung
-	
+	// Serienverwaltung
+
 	public void addPreis(String text) {
 		// TODO Auto-generated method stub
 		try {
 			System.out.println("insertPreis");
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "insert into preis ('name') values ('"+text+"')";
-			
+			String query = "insert into preis ('name') values ('" + text + "')";
+
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -471,11 +496,13 @@ public class DBManager {
 	public void deleteSerie(String serienNr, String fkRundenNr) {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println("delete Serie " + serienNr +" from Runde " +fkRundenNr);
+			System.out.println("delete Serie " + serienNr + " from Runde "
+					+ fkRundenNr);
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "delete from serie where serienNr="+serienNr+" and fkRundenNr="+fkRundenNr;
-			
+			String query = "delete from serie where serienNr=" + serienNr
+					+ " and fkRundenNr=" + fkRundenNr;
+
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -492,24 +519,25 @@ public class DBManager {
 			Statement s = con.createStatement();
 			ResultSet rs;
 			usedSerieNr = new ArrayList<>();
-			rs = s.executeQuery("select serienNr from serie where fkRundenNr="+selected);
+			rs = s.executeQuery("select serienNr from serie where fkRundenNr="
+					+ selected);
 			if (rs != null) {
 				while (rs.next()) {
 					int serienNr = rs.getInt("serienNr");
 					usedSerieNr.add(serienNr);
 				}
 			}
-			
-			if (!usedSerieNr.contains(1) && !usedSerieNr.contains(2) && !usedSerieNr.contains(3)){
+
+			if (!usedSerieNr.contains(1) && !usedSerieNr.contains(2)
+					&& !usedSerieNr.contains(3)) {
 				System.out.println("into");
 				NoUsedSerieNr.add(String.valueOf(1));
 				NoUsedSerieNr.add(String.valueOf(2));
 				NoUsedSerieNr.add(String.valueOf(3));
-			}
-			else{
+			} else {
 				for (int i = 1; i <= 3; i++) {
-					System.out.println("i:"+ i);
-					if(!usedSerieNr.contains(i)){
+					System.out.println("i:" + i);
+					if (!usedSerieNr.contains(i)) {
 						NoUsedSerieNr.add(String.valueOf(i));
 					}
 				}
@@ -528,7 +556,8 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select serienNr from serie where fkRundenNr="+selected);
+			rs = s.executeQuery("select serienNr from serie where fkRundenNr="
+					+ selected);
 			if (rs != null) {
 				while (rs.next()) {
 					String serienNr = rs.getString("serienNr");
@@ -536,7 +565,7 @@ public class DBManager {
 				}
 			}
 			con.close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
@@ -544,23 +573,25 @@ public class DBManager {
 		return usedSerieNr2;
 	}
 
-	public void addSerie(String rundeNr,String serienNr, String preis) {
+	public void addSerie(String rundeNr, String serienNr, String preis) {
 		// TODO Auto-generated method stub
 		try {
 			System.out.println("insertSerie");
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select id from preis where name='"+preis+"'");
+			rs = s.executeQuery("select id from preis where name='" + preis
+					+ "'");
 			if (rs != null) {
 				while (rs.next()) {
 					int fkPreis = rs.getInt("id");
 					fkpreis.add(fkPreis);
 				}
 			}
-			
-			String query = "insert into serie ('serienNr', 'fkRundenNr', 'fkPreis') values ("+serienNr+","+rundeNr+","+fkpreis.get(0)+")";
-			
+
+			String query = "insert into serie ('serienNr', 'fkRundenNr', 'fkPreis') values ("
+					+ serienNr + "," + rundeNr + "," + fkpreis.get(0) + ")";
+
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -577,18 +608,20 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select id from rundenTyp where name='"+rundenTypName+"'");
+			rs = s.executeQuery("select id from rundenTyp where name='"
+					+ rundenTypName + "'");
 			if (rs != null) {
 				while (rs.next()) {
 					int rundenTypNr = rs.getInt("id");
 					rundenTyp.add(rundenTypNr);
 				}
 			}
-			int maxRundenNr= getMaxRundenNr();
+			int maxRundenNr = getMaxRundenNr();
 			maxRundenNr++;
-			
-			String query = "insert into runde ('rundenNr', 'fkRundentyp') values ("+maxRundenNr+","+rundenTyp.get(0)+")";
-			
+
+			String query = "insert into runde ('rundenNr', 'fkRundentyp') values ("
+					+ maxRundenNr + "," + rundenTyp.get(0) + ")";
+
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -604,7 +637,8 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select max(rundenNr) as maxRundenNr from runde"); //Last/Max RundenNr
+			rs = s.executeQuery("select max(rundenNr) as maxRundenNr from runde"); // Last/Max
+																					// RundenNr
 			if (rs != null) {
 				while (rs.next()) {
 					int rundenNr = rs.getInt("maxRundenNr");
@@ -612,23 +646,23 @@ public class DBManager {
 				}
 			}
 			con.close();
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error selecting Data");
 		}
 		return maxRundenNr.get(0);
 	}
-	
 
-	public void deleteRunde(String rundenNr) { //müssen noch Fremdschlüssel beziehungen implementiert werden fürs löschen
+	public void deleteRunde(String rundenNr) { // müssen noch Fremdschlüssel
+												// beziehungen implementiert
+												// werden fürs löschen
 		// TODO Auto-generated method stub
 		try {
 			System.out.println("delete Runde " + rundenNr);
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "delete from runde where rundenNr="+rundenNr;
-			
+			String query = "delete from runde where rundenNr=" + rundenNr;
+
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -645,17 +679,18 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select id from rundenTyp where name='"+neuerRundenTyp+"'");
+			rs = s.executeQuery("select id from rundenTyp where name='"
+					+ neuerRundenTyp + "'");
 			if (rs != null) {
 				while (rs.next()) {
 					int rundenTyp = rs.getInt("id");
 					neuerRundenTypen.add(rundenTyp);
 				}
 			}
-			
 
-			String query = "update runde set fkRundentyp="+neuerRundenTypen.get(0)+ " where rundenNr=" + rundenNr;
-			
+			String query = "update runde set fkRundentyp="
+					+ neuerRundenTypen.get(0) + " where rundenNr=" + rundenNr;
+
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -664,31 +699,32 @@ public class DBManager {
 			e.printStackTrace();
 			System.out.println("Error updating Data");
 		}
-		
+
 	}
-	
-	public String getRundenTypById(int id){
+
+	public String getRundenTypById(int id) {
 		String rundenTypName = "";
-		try{
-		con = DBConnector.getConnected();
-		Statement s = con.createStatement();
-		ResultSet rs;
-		
-		rs = s.executeQuery("select name from runde, rundenTyp where runde.fkRundentyp = rundenTyp.id and runde.rundenNr="+id);
-		if (rs != null) {
-			while (rs.next()) {
-				rundenTypName = rs.getString("name");
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+
+			rs = s.executeQuery("select name from runde, rundenTyp where runde.fkRundentyp = rundenTyp.id and runde.rundenNr="
+					+ id);
+			if (rs != null) {
+				while (rs.next()) {
+					rundenTypName = rs.getString("name");
+				}
 			}
-		}
-		con.close();
-		
-		}catch (Exception e) {
+			con.close();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error selecting Data");
 		}
-		
+
 		return rundenTypName;
-	
+
 	}
 
 	public void deletePreis(String preis) {
@@ -697,8 +733,8 @@ public class DBManager {
 			System.out.println("delete Preis " + preis);
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "delete from preis where name='"+preis+"'";
-			
+			String query = "delete from preis where name='" + preis + "'";
+
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -713,7 +749,8 @@ public class DBManager {
 		try {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "update preis set name='" + newPreis	+ "' where name='" + oldPreis + "'";
+			String query = "update preis set name='" + newPreis
+					+ "' where name='" + oldPreis + "'";
 			System.out.println(query);
 			s.execute(query);
 			con.close();
@@ -723,7 +760,6 @@ public class DBManager {
 		}
 	}
 
-	
 	public List<RundenModel> getAllRunden() {
 		// TODO Auto-generated method stub
 		List<RundenModel> runden = new ArrayList<RundenModel>();
@@ -747,18 +783,17 @@ public class DBManager {
 		return runden;
 	}
 
-	
-	//SpielenView
-	
+	// SpielenView
 
 	public int getFirstSerie(int rundenNr) {
 		// TODO Auto-generated method stub
-		
+
 		try {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select serienNr from serie, runde where serie.fkRundenNr = runde.rundenNr and serie.fkRundenNr ="+rundenNr+" limit 1");
+			rs = s.executeQuery("select serienNr from serie, runde where serie.fkRundenNr = runde.rundenNr and serie.fkRundenNr ="
+					+ rundenNr + " limit 1");
 			if (rs != null) {
 				while (rs.next()) {
 					serienNr = rs.getInt("serienNr");
@@ -778,7 +813,8 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select preis.name as preisname from preis,serie,runde where serie.fkRundenNr = runde.rundenNr and serie.fkPreis = preis.id and runde.rundenNr ="+ rundenNr+ " and serie.serienNr ="+ serienNr);
+			rs = s.executeQuery("select preis.name as preisname from preis,serie,runde where serie.fkRundenNr = runde.rundenNr and serie.fkPreis = preis.id and runde.rundenNr ="
+					+ rundenNr + " and serie.serienNr =" + serienNr);
 			if (rs != null) {
 				while (rs.next()) {
 					preis = rs.getString("preisname");
@@ -800,8 +836,9 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-		
-			rs = s.executeQuery("select cur.fkSpieler as fkSpieler,s.name as name, s.vorname as vorname, s.strasse as strasse, s.plz as plz, s.ort as ort from currentSpieler as cur,spieler as s where cur.fkSpieler = s.id and cur.lottozahl ="+zahl);
+
+			rs = s.executeQuery("select cur.fkSpieler as fkSpieler,s.name as name, s.vorname as vorname, s.strasse as strasse, s.plz as plz, s.ort as ort from currentSpieler as cur,spieler as s where cur.fkSpieler = s.id and cur.lottozahl ="
+					+ zahl);
 			if (rs != null) {
 				while (rs.next()) {
 					spielerId = rs.getInt("fkSpieler");
@@ -810,13 +847,14 @@ public class DBManager {
 					String strasse = rs.getString("strasse");
 					int plz = rs.getInt("plz");
 					String ort = rs.getString("ort");
-					txtGewinner = name + ", " + vorname +", " + strasse + ", " + plz + " " + ort;
+					txtGewinner = name + ", " + vorname + ", " + strasse + ", "
+							+ plz + " " + ort;
 				}
 			}
-			if(spielerId != 0){
+			if (spielerId != 0) {
 				updateGewinner(spielerId, rundenNr, serienNr);
 			}
-			
+
 			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -824,20 +862,22 @@ public class DBManager {
 		}
 		return txtGewinner;
 	}
-	
+
 	public void updateGewinner(int spielerId, int rundenNr, int serienNr) {
-		
+
 		try {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
-			String query = "update serie set sieger="+ spielerId +" where fkRundenNr="+rundenNr+" and serienNr ="+serienNr;
+			String query = "update serie set sieger=" + spielerId
+					+ " where fkRundenNr=" + rundenNr + " and serienNr ="
+					+ serienNr;
 			s.execute(query);
 			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error updating Data");
 		}
-		
+
 	}
 
 	public List<SerieModel> holeSerienListe() {
@@ -846,7 +886,9 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select s.serienNr as serienNr,s.fkRundenNr as rundenNr, p.name as preis from serie as s, runde as r, preis as p where s.fkRundenNr = r.rundenNr and s.fkPreis  =p.id and s.fkRundenNr order by s.fkRundenNr, s.serienNr");
+			rs = s.executeQuery("select s.serienNr as serienNr,s.fkRundenNr as rundenNr, p.name as preis from serie as s, "
+					+ "runde as r, preis as p where s.fkRundenNr = r.rundenNr and s.fkPreis  =p.id and s.fkRundenNr and "
+					+ "(sieger IS NULL) AND (manuellerSieger IS NULL) order by s.fkRundenNr, s.serienNr");
 			if (rs != null) {
 				while (rs.next()) {
 					int serienNr = rs.getInt("serienNr");
@@ -867,9 +909,9 @@ public class DBManager {
 		int maxSerie = 0;
 		try {
 			con = DBConnector.getConnected();
-			Statement s = con.createStatement();	
+			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select COUNT(serienNr) as maxSerie from serie");
+			rs = s.executeQuery("select COUNT(serienNr) as maxSerie from serie where (sieger IS NULL) AND (manuellerSieger IS NULL)");
 			if (rs != null) {
 				while (rs.next()) {
 					maxSerie = rs.getInt("maxSerie");
@@ -882,5 +924,70 @@ public class DBManager {
 		}
 		return maxSerie;
 	}
-	
+
+	public void setManuellerGewinner(String siegertext, int rundenNr,
+			int serienNr) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "update serie set manuellerSieger='" + siegertext
+					+ "' where fkRundenNr=" + rundenNr + " and serienNr ="
+					+ serienNr;
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error updating Data");
+		}
+	}
+
+	// TODO Zuweisen von Lottozahlen
+
+	public void setLottozahlen(List<Integer> createPCNumberList) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+
+			List<CurrentSpielerModel> spielerForLottozahlen = getAllCurrentSpieler();
+			
+			int lottozahl = 0;
+			String query = "";
+			int counter = 0;
+			for (CurrentSpielerModel spieler : spielerForLottozahlen) {
+				for (int i = 1; i <= spieler.getKarten()*2; i++) {
+					
+					lottozahl = createPCNumberList.get(counter);
+					
+					query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten', 'lottozahl') values ("
+							+ spieler.getFkSpieler()
+							+ ", '"
+							+ spieler.getName()
+							+ "', '"
+							+ spieler.getVorname()
+							+ "', '"
+							+ spieler.getStrasse()
+							+ "', "
+							+ spieler.getPlz()
+							+ ", '"
+							+ spieler.getOrt()
+							+ "', "
+							+ spieler.getKarten()
+							+ ", "
+							+ lottozahl
+							+ ");";
+					
+					counter++;
+					System.out.println(query);
+					s.execute(query);
+				}
+			}
+
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error updating Data");
+		}
+	}
 }
