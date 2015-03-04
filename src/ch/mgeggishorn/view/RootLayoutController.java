@@ -3,11 +3,8 @@ package ch.mgeggishorn.view;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -39,14 +36,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ch.mgeggishorn.controller.DBManager;
-
-
 import ch.mgeggishorn.controller.Zahlenreihe;
 import ch.mgeggishorn.logger.Log;
 import ch.mgeggishorn.logger.LogView;
 import ch.mgeggishorn.logger.Logger;
 import ch.mgeggishorn.model.CurrentSpielerModel;
-import ch.mgeggishorn.model.RundenModel;
 import ch.mgeggishorn.model.SerieModel;
 import ch.mgeggishorn.model.SpielerModel;
 
@@ -55,8 +49,7 @@ public class RootLayoutController implements Initializable {
 	//Tab
 	@FXML
 	private TabPane menutab;
-	
-	
+
 	//Suche
 	@FXML
 	private TextField txtSuche;
@@ -175,9 +168,8 @@ public class RootLayoutController implements Initializable {
 	
 	//Serienverwaltung
 	@FXML
-	private TreeView treeviewRunden;
+	private TreeView<String> treeviewRunden;
 	private List<SerieModel> serien;
-	private List<RundenModel> allRunden;
 	
 	@FXML
 	private ComboBox<String> rundeWaehlenCombo;
@@ -651,7 +643,7 @@ public class RootLayoutController implements Initializable {
     	int rundeNr = 1;
     	
     	//List[] runden = new List[maxRunden];
-    	List<ArrayList> runden = new ArrayList<ArrayList>();
+    	List<ArrayList<TreeItem<String>>> runden = new ArrayList<ArrayList<TreeItem<String>>>();
     	for(int i =0; i <=maxRunden;i++)
     	{
     		runden.add(new ArrayList<>());
@@ -678,7 +670,7 @@ public class RootLayoutController implements Initializable {
 			}
     		 
 
-			runden.set(i, (ArrayList) serienForCurrentRunde);
+			runden.set(i, (ArrayList<TreeItem<String>>) serienForCurrentRunde);
 		}
     	
     	
