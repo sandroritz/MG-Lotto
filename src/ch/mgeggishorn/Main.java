@@ -29,6 +29,8 @@ import javafx.scene.layout.VBox;
 public class Main extends Application {
 
 	@FXML
+	private Label lblLoginError;
+	@FXML
 	private TextField txtBenutzer;
 	@FXML
 	private TextField txtPasswort;
@@ -38,8 +40,8 @@ public class Main extends Application {
 	public void login() throws IOException {
 		System.out.println(txtBenutzer.getText() + " " + txtPasswort.getText());
 		
-//		if((txtBenutzer.getText().equals("demo")) && (txtPasswort.getText().equals("demo"))){
-			
+	//	if((txtBenutzer.getText().equals("demo")) && (txtPasswort.getText().equals("demo"))){
+			lblLoginError.setText("Login erfolgreich!");
 			Stage stage = new Stage();
 			stage.getIcons().add(new Image("/mg-logo.jpg"));
 			Parent root = FXMLLoader.load(getClass().getResource(
@@ -52,9 +54,12 @@ public class Main extends Application {
 			
 			Stage stageToClose = (Stage) txtBenutzer.getScene().getWindow();
 			stageToClose.close();
-		}
+//		}
+//		else{
+//			lblLoginError.setText("Fehler beim Einloggen!");
+//		}
 
-//	}
+	}
 	
 
 	@Override
