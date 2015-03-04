@@ -40,6 +40,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ch.mgeggishorn.controller.DBManager;
 import ch.mgeggishorn.controller.Zahlenreihe;
@@ -214,6 +215,7 @@ public class SpielenController implements Initializable {
 
 		DBManager dbm = new DBManager();
 		try {
+			dbm.deleteLottozahlen();
 			dbm.setLottozahlen(reihe.createPCNumberList());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,8 +224,18 @@ public class SpielenController implements Initializable {
 	}
 
 	@FXML
-	private void spielerAusschliessen() {
+	private void spielerAusschliessen() throws IOException {
+		Stage stage = new Stage();
+		stage.getIcons().add(new Image("/mg-logo.jpg"));
+		Parent root = FXMLLoader.load(getClass().getResource(
+				"RemoveSpieler.fxml"));
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(btnZahlBestaetigen.getScene().getWindow());
 
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.setTitle("MG - Lotto");
+		stage.show();
 	}
 
 	private void holeSerienListe() {

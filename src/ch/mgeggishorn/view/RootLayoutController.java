@@ -169,7 +169,7 @@ public class RootLayoutController implements Initializable {
 	@FXML
 	private RadioButton radiokarte8;
 	@FXML
-	private RadioButton radiokarte16;
+	private RadioButton radiokarte20;
 	
 	
 	
@@ -213,8 +213,9 @@ public class RootLayoutController implements Initializable {
 	
 	
     public void initialize(URL url, ResourceBundle rb) {
-    	
-    	
+    	Zahlenreihe r = new Zahlenreihe();
+    	r.createSaalNumberList();
+    	r.createPCNumberList();
     	
     	logger.info("Test");
     	
@@ -404,7 +405,7 @@ public class RootLayoutController implements Initializable {
 		        }
 		      });
 		 
-		 startLogger();
+		 //startLogger();
 		
     }
 

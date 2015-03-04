@@ -40,6 +40,16 @@ public class CurrentSpielerModel {
 		this.karten= new SimpleIntegerProperty(karten);
 	}
 	
+	public CurrentSpielerModel(int fkSpieler, String name, String vorname,
+			String strasse, int plz, String ort) {
+		this.fkSpieler= new SimpleIntegerProperty(fkSpieler);
+		this.name = new SimpleStringProperty(name);
+		this.vorname = new SimpleStringProperty(vorname);
+		this.strasse = new SimpleStringProperty(strasse);
+		this.plz = new SimpleIntegerProperty(plz);
+		this.ort = new SimpleStringProperty(ort);
+	}
+	
 
 	public int getId() {
 		return id.get();
@@ -110,6 +120,11 @@ public class CurrentSpielerModel {
 		this.lottozahlen = lottozahlen;
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.getName() + " " + this.vorname ;
+	}
 
 	
 }

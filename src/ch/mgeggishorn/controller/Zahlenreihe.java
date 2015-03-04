@@ -1,10 +1,15 @@
 package ch.mgeggishorn.controller;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import com.opencsv.CSVWriter;
 
 public class Zahlenreihe {
 
@@ -40,6 +45,38 @@ public class Zahlenreihe {
 			saalNumberList.add(zufallszahl);
 		}
 //		printSaalNumber(saalNumberList);
+		
+		// Start
+		
+		String csv = "C:\\Users\\Sandro\\Desktop\\output_saal.csv";
+		CSVWriter writer = null;
+		try {
+			writer = new CSVWriter(new FileWriter(csv));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		List<String[]> csvdata = new ArrayList<String[]>();
+		for( int i = 0; i < maxSaalZahl; i++){
+			csvdata.add(new String[] {String.valueOf(saalNumberList.get(i))});
+		}
+		writer.writeAll(csvdata);
+		 
+		try {
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		 
+		
+
+		
+		//Ende
+		
 		return saalNumberList;
 	}
 	
@@ -49,6 +86,37 @@ public class Zahlenreihe {
 		pcNumberList.removeAll(saalNumberList);
 		
 //		printPCNumber(pcNumberList);
+		
+	// Start
+		
+		String csv = "C:\\Users\\Sandro\\Desktop\\output_pc.csv";
+		CSVWriter writer = null;
+		try {
+			writer = new CSVWriter(new FileWriter(csv));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		List<String[]> csvdata = new ArrayList<String[]>();
+		for( int i = 0; i < maxPcZahl; i++){
+			csvdata.add(new String[] {String.valueOf(pcNumberList.get(i))});
+		}
+		writer.writeAll(csvdata);
+		 
+		try {
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		 
+		
+
+		
+		//Ende
 		return pcNumberList;
 	}
 	

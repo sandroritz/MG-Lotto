@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.view.RemoveSpielerController">
+   <children>
+      <Button layoutX="219.0" layoutY="79.0" mnemonicParsing="false" onAction="#sucheCurrentSpieler" prefHeight="25.0" prefWidth="70.0" text="Suchen" />
+      <TextField fx:id="txtCurrentSpielerSearch" layoutX="17.0" layoutY="79.0" prefHeight="25.0" prefWidth="186.0" promptText="Spieler suchen" />
+      <ListView fx:id="listSearchedCurrentSpieler" layoutX="17.0" layoutY="113.0" prefHeight="173.0" prefWidth="186.0" />
+      <Button layoutX="219.0" layoutY="177.0" mnemonicParsing="false" onAction="#removeCurrentSpieler" prefHeight="25.0" prefWidth="70.0" text="Löschen" />
+      <Label layoutX="14.0" layoutY="22.0" text="Spieler vom aktuellen Spiel ausschliessen">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblLog" layoutX="14.0" layoutY="51.0" prefHeight="17.0" prefWidth="276.0" textFill="RED" />
+   </children>
+</AnchorPane>

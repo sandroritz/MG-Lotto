@@ -41,7 +41,9 @@ public class DBManager {
 
 	List<SerieModel> serienliste = new ArrayList<SerieModel>();
 
-	HashMap<Integer, Integer> spielerAnzKartenList = new HashMap<Integer, Integer>();
+	//RemoveSpielerView
+	List<CurrentSpielerModel> searchedCurrentSpieler = new ArrayList<>();
+	
 
 	/**
 	 * Gibt die Daten von einem gewissen SpielerId zurueck
@@ -283,7 +285,7 @@ public class DBManager {
 			}
 
 			if (id == 0) {
-				String query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten') values ("
+				String query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten','bool_play') values ("
 						+ currentSpieler.getFkSpieler()
 						+ ", '"
 						+ currentSpieler.getName()
@@ -296,7 +298,7 @@ public class DBManager {
 						+ ", '"
 						+ currentSpieler.getOrt()
 						+ "', "
-						+ currentSpieler.getKarten() + ")";
+						+ currentSpieler.getKarten() + ",1)";
 
 				System.out.println(query);
 				s.execute(query);
@@ -837,8 +839,9 @@ public class DBManager {
 			Statement s = con.createStatement();
 			ResultSet rs;
 
-			rs = s.executeQuery("select cur.fkSpieler as fkSpieler,s.name as name, s.vorname as vorname, s.strasse as strasse, s.plz as plz, s.ort as ort from currentSpieler as cur,spieler as s where cur.fkSpieler = s.id and cur.lottozahl ="
-					+ zahl);
+			rs = s.executeQuery("select cur.fkSpieler as fkSpieler,s.name as name, s.vorname as vorname, s.strasse as strasse, "
+					+ "s.plz as plz, s.ort as ort from currentSpieler as cur,spieler as s where cur.fkSpieler = s.id and cur.lottozahl ="
+					+ zahl + " and bool_play=1");
 			if (rs != null) {
 				while (rs.next()) {
 					spielerId = rs.getInt("fkSpieler");
@@ -951,16 +954,16 @@ public class DBManager {
 			Statement s = con.createStatement();
 
 			List<CurrentSpielerModel> spielerForLottozahlen = getAllCurrentSpieler();
-			
+
 			int lottozahl = 0;
 			String query = "";
 			int counter = 0;
 			for (CurrentSpielerModel spieler : spielerForLottozahlen) {
-				for (int i = 1; i <= spieler.getKarten()*2; i++) {
-					
+				for (int i = 1; i <= spieler.getKarten() * 2; i++) {
+
 					lottozahl = createPCNumberList.get(counter);
-					
-					query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten', 'lottozahl') values ("
+
+					query = "insert into currentSpieler ('fkSpieler','name', 'vorname', 'strasse', 'plz', 'ort', 'karten', 'lottozahl', 'bool_play') values ("
 							+ spieler.getFkSpieler()
 							+ ", '"
 							+ spieler.getName()
@@ -976,14 +979,85 @@ public class DBManager {
 							+ spieler.getKarten()
 							+ ", "
 							+ lottozahl
-							+ ");";
-					
+							+ ", 1);";
+
 					counter++;
 					System.out.println(query);
 					s.execute(query);
 				}
 			}
 
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error updating Data");
+		}
+	}
+
+	public void deleteLottozahlen() {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "delete from currentSpieler where lottozahl IS NOT NULL";
+
+			System.out.println(query);
+			s.execute(query);
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error DELETING Data");
+		}
+	}
+
+	//Remove a currentSpieler of the game
+	public List<CurrentSpielerModel> getSearchedCurrentSpieler(String searchQuery) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			String query ="select fkSpieler, name, vorname, strasse, plz, ort from currentSpieler where bool_play=1 and (name like '%"
+					+ searchQuery
+					+ "%' or vorname like '%"
+					+ searchQuery
+					+ "%' or strasse like '%"
+					+ searchQuery
+					+ "%' or plz like '%"
+					+ searchQuery
+					+ "%' or ort like '%"
+					+ searchQuery + "%') group by fkSpieler";
+			System.out.println(query);
+			rs = s.executeQuery(query);
+			
+			
+			if (rs != null) {
+				while (rs.next()) {
+					int fkSpieler = rs.getInt("fkSpieler");
+					String name = rs.getString("name");
+					String vorname = rs.getString("vorname");
+					String strasse = rs.getString("strasse");
+					int plz = rs.getInt("plz");
+					String ort = rs.getString("ort");
+					searchedCurrentSpieler.add(new CurrentSpielerModel(fkSpieler, name, vorname,
+							strasse, plz, ort));
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+		return searchedCurrentSpieler;
+	}
+
+	public void removeSearchedCurrentSpieler(int fkSpieler) {
+		// TODO Auto-generated method stub
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			String query = "update currentSpieler set bool_play=0 where fkSpieler=" + fkSpieler;
+			s.execute(query);
 			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
