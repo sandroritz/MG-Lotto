@@ -1,4 +1,4 @@
-package ch.mgeggishorn.view;
+package ch.mgeggishorn.controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,8 +35,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ch.mgeggishorn.controller.DBManager;
-import ch.mgeggishorn.controller.Zahlenreihe;
 import ch.mgeggishorn.logger.Log;
 import ch.mgeggishorn.logger.LogView;
 import ch.mgeggishorn.logger.Logger;
@@ -234,7 +232,6 @@ public class RootLayoutController implements Initializable {
     		    new ChangeListener<Tab>() {
     		        @Override
     		        public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-    		            System.out.println("Tab Selection changed");
     		            refreshAllSpielerTableView();
     		            refreshCurrentSpielerTableView();
     		        }
@@ -311,12 +308,9 @@ public class RootLayoutController implements Initializable {
 		txtSuche.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-		       System.out.println(newValue);
-		       
+		         
 		       ObservableList<SpielerModel> searchData = null;
-		    
 		       List<SpielerModel> searchedSpieler = null;
-		       
 		       
 		       searchedSpieler= dbm.getSpielerByName(newValue);
 		       searchData = FXCollections.observableArrayList(searchedSpieler);
@@ -336,12 +330,8 @@ public class RootLayoutController implements Initializable {
 		txtSucheSelect.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-		       System.out.println(newValue);
-		       
 		       ObservableList<SpielerModel> searchData = null;
-		    
 		       List<SpielerModel> searchedSpieler = null;
-		       
 		       
 		       searchedSpieler= dbm.getSpielerByName(newValue);
 		       searchData = FXCollections.observableArrayList(searchedSpieler);
@@ -360,8 +350,7 @@ public class RootLayoutController implements Initializable {
 		
 		rundeWaehlenCombo.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override public void changed(ObservableValue ov, String t, String selected) {
-	              System.out.println(selected);
-	              serieWaehlen2Combo.getItems().clear();
+		              serieWaehlen2Combo.getItems().clear();
 	              DBManager dbm = new DBManager();
 		          	try{
 		          		List<String> noUsedSerieNr = dbm.getNoUsedSerieNr(selected);
@@ -376,7 +365,6 @@ public class RootLayoutController implements Initializable {
 	      });
 		 rundeWaehlen4Combo.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override public void changed(ObservableValue ov, String t, String selected) {
-	              System.out.println(selected);
 	              serieWaehlenCombo.getItems().clear();
 	              DBManager dbm = new DBManager();
 		          	try{
@@ -392,7 +380,6 @@ public class RootLayoutController implements Initializable {
 	      });
 		 preisWaehlen2Combo.valueProperty().addListener(new ChangeListener<String>() {
 		        @Override public void changed(ObservableValue ov, String t, String selectedPreis) {
-		              System.out.println(selectedPreis);
 		              txtPreisBearbeiten.setText(selectedPreis);     	
 		        }
 		      });
@@ -490,7 +477,6 @@ public class RootLayoutController implements Initializable {
 	   DBManager dbm = new DBManager();
 	   SpielerModel detailSpieler = (SpielerModel) dbm.getDetailOfSpieler(selectedSpielerId).get(0);
 	   int anzKarten =  getSelectedKartenRadio();
-	   System.out.println(anzKarten);
 	  
 		CurrentSpielerModel currentSpieler = new CurrentSpielerModel(detailSpieler.getId(), detailSpieler.getName(), detailSpieler.getVorname(),
 				detailSpieler.getStrasse(), detailSpieler.getPlz(), detailSpieler.getOrt(), anzKarten);
@@ -525,7 +511,7 @@ public class RootLayoutController implements Initializable {
 		Stage stage = new Stage(); 
 		stage.getIcons().add(new Image("/mg-logo.jpg"));
 		Parent root = FXMLLoader.load(getClass().getResource(
-				"SpielenView.fxml"));
+				"../view/SpielenView.fxml"));
 		
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
@@ -627,49 +613,35 @@ public class RootLayoutController implements Initializable {
     //Serienverwaltung Funktionen
     
 	public void createTree() {
-		List<TreeItem<String>> serienForCurrentRunde = new ArrayList<TreeItem<String>>();
-		
 		DBManager dbm = new DBManager();
+		List<TreeItem<String>> serienForCurrentRunde = new ArrayList<TreeItem<String>>();
+		int maxRunden =dbm.getMaxRundenNr();
+    	int rundeNr = 1;
+    	
+		
     	try{
     		serien = dbm.getAllSerien();
-    		
-    		
-    	} catch(Exception e){
+    		    	} catch(Exception e){
     		e.printStackTrace();
     	}
     	
-    	int maxRunden =dbm.getMaxRundenNr();
-    	System.out.println(maxRunden);
-    	int rundeNr = 1;
-    	
-    	//List[] runden = new List[maxRunden];
     	List<ArrayList<TreeItem<String>>> runden = new ArrayList<ArrayList<TreeItem<String>>>();
     	for(int i =0; i <=maxRunden;i++)
     	{
     		runden.add(new ArrayList<>());
     	}
-    	
 
     	for(int i = rundeNr; i <= maxRunden;i++){
     		serienForCurrentRunde = null;
 			serienForCurrentRunde = new ArrayList<TreeItem<String>>();
 			int counter = 0; //counter zeigt auf SerienNr
     		for (SerieModel serie : serien) {
-    			
-				//System.out.println("Runde Nr: " + i);
 					if(serie.getRundeNr() == i){
 						serienForCurrentRunde.add(new TreeItem<String>("SerienNr: " +serie.getSerieNr()));
 						serienForCurrentRunde.get(counter).getChildren().add((new TreeItem<String>("Preis: " +serie.getPreis()))); //Preise von Serien hinzufügen
 						counter++; //nächste Serie durchlaufen
-					}
-					else{
-						//System.out.println("Falsche Runde: " + serie.getRundeNr());
-					}
-					
-					
+					}	
 			}
-    		 
-
 			runden.set(i, (ArrayList<TreeItem<String>>) serienForCurrentRunde);
 		}
     	

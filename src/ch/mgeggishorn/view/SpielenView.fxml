@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.view.SpielenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.controller.SpielenController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -20,6 +20,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#spielerAusschliessen" text="Spieler ausschliessen" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Export">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#gewinnerExportieren" text="Gewinner exportieren" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>

@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.view.RemoveSpielerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.mgeggishorn.controller.RemoveSpielerController">
    <children>
       <Button layoutX="219.0" layoutY="79.0" mnemonicParsing="false" onAction="#sucheCurrentSpieler" prefHeight="25.0" prefWidth="70.0" text="Suchen" />
       <TextField fx:id="txtCurrentSpielerSearch" layoutX="17.0" layoutY="79.0" prefHeight="25.0" prefWidth="186.0" promptText="Spieler suchen" />

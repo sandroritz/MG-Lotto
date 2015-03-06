@@ -1,9 +1,10 @@
-package ch.mgeggishorn.view;
+package ch.mgeggishorn.controller;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
 
 
 
@@ -16,7 +17,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
-import ch.mgeggishorn.controller.DBManager;
 import ch.mgeggishorn.model.CurrentSpielerModel;
 
 

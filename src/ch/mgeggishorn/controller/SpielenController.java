@@ -1,15 +1,33 @@
-package ch.mgeggishorn.view;
+package ch.mgeggishorn.controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.itextpdf.text.Anchor;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chapter;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Section;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,10 +40,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ch.mgeggishorn.controller.DBManager;
-import ch.mgeggishorn.controller.Zahlenreihe;
 import ch.mgeggishorn.model.SerieModel;
-
 
 public class SpielenController implements Initializable {
 
@@ -118,20 +133,7 @@ public class SpielenController implements Initializable {
 			countCurrentSerie++;
 
 			if (countCurrentSerie < maxSerien) {
-				rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
-				serienNr = serienliste.get(countCurrentSerie).getSerieNr();
-				preis = serienliste.get(countCurrentSerie).getPreis();
-				refreshStatusLabels(rundenNr, serienNr, preis);
-				// Labels clear
-				txtGetrillteeZahl.setText("");
-				lblGewinner.setText("Gewinner:");
-				txtManuellGewinner.setText("");
-				anzVersuche = 0;
-				lblAnzVersuche.setText("Anz. Versuche: 0");
-				btnZahlBestaetigen.setDisable(false);
-				txtManuellGewinner.setDisable(false);
-				cboxManuell.setDisable(false);
-				cboxManuell.selectedProperty().set(false);
+				refreshView();
 			} else {
 				System.out.println("Alle Serien gespielt");
 			}
@@ -143,20 +145,7 @@ public class SpielenController implements Initializable {
 			countCurrentSerie++;
 
 			if (countCurrentSerie < maxSerien) {
-				rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
-				serienNr = serienliste.get(countCurrentSerie).getSerieNr();
-				preis = serienliste.get(countCurrentSerie).getPreis();
-				refreshStatusLabels(rundenNr, serienNr, preis);
-				// Labels clear
-				txtGetrillteeZahl.setText("");
-				lblGewinner.setText("Gewinner:");
-				txtManuellGewinner.setText("");
-				anzVersuche = 0;
-				lblAnzVersuche.setText("Anz. Versuche: 0");
-				btnZahlBestaetigen.setDisable(false);
-				txtManuellGewinner.setDisable(false);
-				cboxManuell.setDisable(false);
-				cboxManuell.selectedProperty().set(false);
+				refreshView();
 			} else {
 				System.out.println("Alle Serien gespielt");
 			}
@@ -175,7 +164,7 @@ public class SpielenController implements Initializable {
 		Stage stage = new Stage();
 		stage.getIcons().add(new Image("/mg-logo.jpg"));
 		Parent root = FXMLLoader.load(getClass().getResource(
-				"RootLayoutView.fxml"));
+				"../view/RootLayoutView.fxml"));
 
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
@@ -203,7 +192,7 @@ public class SpielenController implements Initializable {
 		Stage stage = new Stage();
 		stage.getIcons().add(new Image("/mg-logo.jpg"));
 		Parent root = FXMLLoader.load(getClass().getResource(
-				"RemoveSpieler.fxml"));
+				"../view/RemoveSpieler.fxml"));
 		stage.initModality(Modality.WINDOW_MODAL);
 		stage.initOwner(btnZahlBestaetigen.getScene().getWindow());
 
@@ -242,4 +231,111 @@ public class SpielenController implements Initializable {
 		lblSerieNr.setText("Serien Nr: " + serienNr);
 		lblPreis.setText("Preis: " + preis);
 	}
+
+	private void refreshView() {
+		rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
+		serienNr = serienliste.get(countCurrentSerie).getSerieNr();
+		preis = serienliste.get(countCurrentSerie).getPreis();
+		refreshStatusLabels(rundenNr, serienNr, preis);
+		// Labels clear
+		txtGetrillteeZahl.setText("");
+		lblGewinner.setText("Gewinner:");
+		txtManuellGewinner.setText("");
+		anzVersuche = 0;
+		lblAnzVersuche.setText("Anz. Versuche: 0");
+		btnZahlBestaetigen.setDisable(false);
+		txtManuellGewinner.setDisable(false);
+		cboxManuell.setDisable(false);
+		cboxManuell.selectedProperty().set(false);
+	}
+
+	@FXML
+	private void gewinnerExportieren() {
+		generatePDF();
+	}
+
+	private static String FILE = "c:/temp/gewinnerliste_"
+			+ String.valueOf(new Date().getYear() + 1900) + ".pdf";
+	private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
+			Font.BOLD);
+	private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+			Font.NORMAL, BaseColor.RED);
+	private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
+			Font.BOLD);
+	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+			Font.BOLD);
+
+	private void generatePDF() {
+		// PDF Generator
+
+		try {
+			Document document = new Document();
+			PdfWriter.getInstance(document, new FileOutputStream(FILE));
+			document.open();
+			addMetaData(document);
+			addTitlePage(document);
+			document.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void addMetaData(Document document) {
+
+		document.addTitle("MG Eggishorn - Lotto");
+		document.addSubject("Gewinnerliste "
+				+ String.valueOf(new Date().getYear() + 1900));
+		document.addAuthor("MG Eggishorn");
+		document.addCreator("MG Eggishorn");
+	}
+
+	private static void addTitlePage(Document document)
+			throws DocumentException {
+		Paragraph preface = new Paragraph();
+		// We add one empty line
+		addEmptyLine(preface, 1);
+		// Lets write a big header
+		preface.add(new Paragraph("MG Eggishorn - Lotto", catFont));
+
+		addEmptyLine(preface, 1);
+		// Will create: Report generated by: _name, _date
+		preface.add(new Paragraph("Report vom: " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				smallBold));
+		addEmptyLine(preface, 2);
+		preface.add(new Paragraph("Gewinnerliste", subFont));
+
+		addEmptyLine(preface, 2);
+		document.add(preface);
+		createTable(document);
+
+	}
+
+	private static void createTable(Document document) throws DocumentException {
+
+		Chunk trennlinie = new Chunk(new LineSeparator(0.5f, 100,
+				BaseColor.BLACK, Element.ALIGN_CENTER, 3.5f));
+
+		DBManager dbm = new DBManager();
+		List<String> gewinnerlist = dbm.getAllGewinner();
+		Paragraph pg;
+		int i = 0;
+		for (String gewinner : gewinnerlist) {
+			pg = new Paragraph(gewinner, redFont);
+
+			if (i % 2 == 0) {
+				pg = new Paragraph(gewinner, smallBold);
+				document.add(trennlinie);
+			}
+			i++;
+			document.add(pg);
+
+		}
+	}
+
+	private static void addEmptyLine(Paragraph paragraph, int number) {
+		for (int i = 0; i < number; i++) {
+			paragraph.add(new Paragraph(" "));
+		}
+	}
+
 }

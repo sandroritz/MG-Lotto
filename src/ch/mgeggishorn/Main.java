@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import ch.mgeggishorn.controller.*;
-import ch.mgeggishorn.view.RootLayoutController;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
