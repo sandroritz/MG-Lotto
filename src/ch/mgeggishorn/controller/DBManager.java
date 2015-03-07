@@ -1043,11 +1043,12 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select s.fkRundenNr as rundeNr, s.serienNr as serienNr,  p.name as preisname, "
-					+ "c.name as name, c.vorname as vorname, c.strasse as strasse, c.plz as plz, c.ort as ort, "
-					+ "s.manuellerSieger as mSieger from serie as s, runde as r, preis as p, currentSpieler as c "
-					+ "where s.fkRundenNr = r.rundenNr and s.fkPreis = p.id and s.sieger = c.fkSpieler group by"
-					+ " r.rundenNr,s.serienNr order by r.rundenNr,s.serienNr ");
+			rs = s.executeQuery("select serie.fkRundenNr as rundeNr, serie.serienNr as serienNr, preis.name as preisname , "
+					+ "serie.manuellerSieger as mSieger, currentSpieler.name as name, currentSpieler.vorname as vorname, "
+					+ "currentSpieler.strasse as strasse, currentSpieler.plz as plz, currentSpieler.ort as ort "
+					+ "from serie left join currentSpieler on currentSpieler.fkSpieler = serie.sieger left join "
+					+ "runde on runde.rundenNr =serie.fkRundenNr left join preis on preis.id=serie.fkPreis "
+					+ "group by serie.fkRundenNr, serie.serienNr order by serie.fkRundenNr, serie.serienNr");
 			if (rs != null) {
 				while (rs.next()) {
 					int rundeNr = rs.getInt("rundeNr");
@@ -1060,12 +1061,13 @@ public class DBManager {
 					String ort = rs.getString("ort");
 					String mSieger = rs.getString("mSieger");
 					
-					if(mSieger==""){
-						gewinner = mSieger;
-					}
-					else{
+					if(mSieger==null){
 						gewinner = name +" " + vorname + ", " + strasse + ", " + plz + " " + ort;
 					}
+					else{
+						gewinner = mSieger;
+					}
+					
 					returnRunde = "Runden Nr: " + rundeNr + "                                             Serien Nr: " +serienNr + "                                             Preis: " + preisname;
 					siegerlist.add(returnRunde);
 					siegerlist.add(gewinner);

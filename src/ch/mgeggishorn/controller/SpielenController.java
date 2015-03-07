@@ -254,7 +254,7 @@ public class SpielenController implements Initializable {
 		generatePDF();
 	}
 
-	private static String FILE = "c:/temp/gewinnerliste_"
+	private static String FILE = "c:/temp/mglotto_gewinnerliste_"
 			+ String.valueOf(new Date().getYear() + 1900) + ".pdf";
 	private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
 			Font.BOLD);
