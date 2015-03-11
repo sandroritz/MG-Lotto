@@ -462,6 +462,7 @@ public class RootLayoutController implements Initializable {
 			txtNeuPlz.setText(String.valueOf(neuSpieler.getPlz()));
 			txtNeuOrt.setText(neuSpieler.getOrt());
 			clearDetail();
+			refreshTable();
 			
 
 		} catch (Exception e) {

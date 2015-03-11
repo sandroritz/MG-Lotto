@@ -1,9 +1,7 @@
 package ch.mgeggishorn.controller;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

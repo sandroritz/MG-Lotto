@@ -1,28 +1,15 @@
 package ch.mgeggishorn;
 
 import java.io.IOException;
-import java.util.Random;
-
-import ch.mgeggishorn.controller.*;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-
 
 
 public class Main extends Application {
@@ -39,7 +26,7 @@ public class Main extends Application {
 	public void login() throws IOException {
 		System.out.println(txtBenutzer.getText() + " " + txtPasswort.getText());
 		
-	//	if((txtBenutzer.getText().equals("demo")) && (txtPasswort.getText().equals("demo"))){
+	if((txtBenutzer.getText().equals("demo")) && (txtPasswort.getText().equals("demo"))){
 			lblLoginError.setText("Login erfolgreich!");
 			Stage stage = new Stage();
 			stage.getIcons().add(new Image("/mg-logo.jpg"));
@@ -53,10 +40,10 @@ public class Main extends Application {
 			
 			Stage stageToClose = (Stage) txtBenutzer.getScene().getWindow();
 			stageToClose.close();
-//		}
-//		else{
-//			lblLoginError.setText("Fehler beim Einloggen!");
-//		}
+		}
+		else{
+			lblLoginError.setText("Fehler beim Einloggen!");
+		}
 
 	}
 	
