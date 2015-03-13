@@ -353,14 +353,17 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select serienNr, fkRundenNr, preis.name as preis from serie, preis, runde where serie.fkRundenNr = runde.rundenNr and serie.fkPreis=preis.id order by fkRundenNr, serienNr;");
+			rs = s.executeQuery("select serienNr, fkRundenNr,rundenTyp.name as rundenTyp, preis.name as preis "
+					+ "from serie, preis, runde, rundenTyp where serie.fkRundenNr = runde.rundenNr and "
+					+ "serie.fkPreis=preis.id and runde.fkRundenTyp=rundenTyp.id order by fkRundenNr, serienNr;");
 			if (rs != null) {
 				while (rs.next()) {
 					int serienNr = rs.getInt("serienNr");
 					int rundenNr = rs.getInt("fkRundenNr");
 					String preis = rs.getString("preis");
+					String rundenTyp = rs.getString("rundenTyp");
 
-					serien.add(new SerieModel(serienNr, rundenNr, preis));
+					serien.add(new SerieModel(serienNr, rundenNr, preis, rundenTyp));
 				}
 			}
 			con.close();
@@ -858,15 +861,17 @@ public class DBManager {
 			con = DBConnector.getConnected();
 			Statement s = con.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("select s.serienNr as serienNr,s.fkRundenNr as rundenNr, p.name as preis from serie as s, "
-					+ "runde as r, preis as p where s.fkRundenNr = r.rundenNr and s.fkPreis  =p.id and s.fkRundenNr and "
-					+ "(sieger IS NULL) AND (manuellerSieger IS NULL) order by s.fkRundenNr, s.serienNr");
+			rs = s.executeQuery("select s.serienNr as serienNr,s.fkRundenNr as rundenNr, t.name as rundenTyp, p.name as preis"
+					+ " from serie as s, runde as r, rundenTyp as t, preis as p where s.fkRundenNr = r.rundenNr "
+					+ "AND r.fkRundenTyp=t.id and s.fkPreis  =p.id and s.fkRundenNr and(sieger IS NULL) "
+					+ "AND (manuellerSieger IS NULL) order by s.fkRundenNr, s.serienNr");
 			if (rs != null) {
 				while (rs.next()) {
 					int serienNr = rs.getInt("serienNr");
 					int rundenNr = rs.getInt("rundenNr");
 					String preis = rs.getString("preis");
-					serienliste.add(new SerieModel(serienNr, rundenNr, preis));
+					String rundenTyp = rs.getString("rundenTyp");
+					serienliste.add(new SerieModel(serienNr, rundenNr, preis, rundenTyp));
 				}
 			}
 			con.close();

@@ -39,19 +39,20 @@
             <Label fx:id="lblRundenNr" layoutX="14.0" layoutY="61.0" text="RundeNr:" />
             <Label fx:id="lblSerieNr" layoutX="104.0" layoutY="61.0" text="SerieNr:" />
             <Label fx:id="lblPreis" layoutX="182.0" layoutY="61.0" text="Preis:" />
-            <Separator layoutX="14.0" layoutY="87.0" prefHeight="6.0" prefWidth="304.0" />
-            <Label layoutX="14.0" layoutY="110.0" text="Getrillte Zahl eingeben:" />
-            <TextField fx:id="txtGetrillteeZahl" layoutX="152.0" layoutY="106.0" prefHeight="25.0" prefWidth="55.0" />
-            <Button fx:id="btnZahlBestaetigen" layoutX="218.0" layoutY="106.0" mnemonicParsing="false" onAction="#zahlBestaetigen" prefHeight="25.0" prefWidth="100.0" text="Zahl bestätigen" />
-            <Label fx:id="lblGewinner" layoutX="18.0" layoutY="164.0" text="Gewinner: ">
+            <Separator layoutX="14.0" layoutY="82.0" prefHeight="6.0" prefWidth="304.0" />
+            <Label layoutX="14.0" layoutY="134.0" text="Getrillte Zahl eingeben:" />
+            <TextField fx:id="txtGetrillteeZahl" layoutX="152.0" layoutY="130.0" prefHeight="25.0" prefWidth="55.0" />
+            <Button fx:id="btnZahlBestaetigen" layoutX="218.0" layoutY="130.0" mnemonicParsing="false" onAction="#zahlBestaetigen" prefHeight="25.0" prefWidth="100.0" text="Zahl bestätigen" />
+            <Label fx:id="lblGewinner" layoutX="18.0" layoutY="189.0" text="Gewinner: ">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <CheckBox fx:id="cboxManuell" layoutX="18.0" layoutY="192.0" mnemonicParsing="false" text="manuell festlegen" />
-            <TextField fx:id="txtManuellGewinner" disable="true" layoutX="152.0" layoutY="188.0" prefHeight="25.0" prefWidth="167.0" promptText="Gewinner eingeben..." />
-            <Button layoutX="206.0" layoutY="236.0" mnemonicParsing="false" onAction="#serieAbschliessen" prefHeight="25.0" prefWidth="112.0" text="Serie abschliessen" />
-            <Label fx:id="lblAnzVersuche" layoutX="152.0" layoutY="138.0" text="Anz. Versuche: 0" />
+            <CheckBox fx:id="cboxManuell" layoutX="18.0" layoutY="217.0" mnemonicParsing="false" text="manuell festlegen" />
+            <TextField fx:id="txtManuellGewinner" disable="true" layoutX="152.0" layoutY="213.0" prefHeight="25.0" prefWidth="167.0" promptText="Gewinner eingeben..." />
+            <Button layoutX="206.0" layoutY="244.0" mnemonicParsing="false" onAction="#serieAbschliessen" prefHeight="25.0" prefWidth="112.0" text="Serie abschliessen" />
+            <Label fx:id="lblAnzVersuche" layoutX="152.0" layoutY="162.0" text="Anz. Versuche: 0" />
+            <Label fx:id="lblRundentyp" layoutX="14.0" layoutY="91.0" text="RundenTyp:" />
          </children>
       </AnchorPane>
    </center>

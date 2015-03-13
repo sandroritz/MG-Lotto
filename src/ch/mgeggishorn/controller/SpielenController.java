@@ -47,6 +47,8 @@ public class SpielenController implements Initializable {
 	@FXML
 	private Label lblGewinner;
 	@FXML
+	private Label lblRundentyp;
+	@FXML
 	private TextField txtGetrillteeZahl;
 	@FXML
 	private TextField txtManuellGewinner;
@@ -58,6 +60,7 @@ public class SpielenController implements Initializable {
 	int rundenNr = 0;
 	int serienNr = 0;
 	String preis = "";
+	String rundenTyp = "";
 
 	int maxSerien = 0;
 	int countCurrentSerie = 0;
@@ -71,12 +74,27 @@ public class SpielenController implements Initializable {
 		serienliste = new ArrayList<SerieModel>();
 		holeSerienListe();
 		getMaxSerien();
+		
 		if (countCurrentSerie <= maxSerien) {
 			rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
 			serienNr = serienliste.get(countCurrentSerie).getSerieNr();
 			preis = serienliste.get(countCurrentSerie).getPreis();
-
-			refreshStatusLabels(rundenNr, serienNr, preis);
+			rundenTyp = serienliste.get(countCurrentSerie).getRundentyp();
+			if(rundenTyp.equals("Saalrunde")){
+				System.out.println(rundenTyp);
+				System.out.println("in");
+				txtGetrillteeZahl.setDisable(true);
+				btnZahlBestaetigen.setDisable(true);
+				txtManuellGewinner.setDisable(false);
+				cboxManuell.selectedProperty().set(true);
+				cboxManuell.setDisable(false);
+				lblGewinner.setText("Gewinner:");
+				refreshStatusLabels(rundenNr, serienNr, preis, rundenTyp);
+			}
+			else{
+				refreshStatusLabels(rundenNr, serienNr, preis, rundenTyp);
+			}
+			
 		}
 		cboxManuell.selectedProperty().addListener(
 				new ChangeListener<Boolean>() {
@@ -216,28 +234,48 @@ public class SpielenController implements Initializable {
 		}
 	}
 
-	private void refreshStatusLabels(int rundenNr, int serienNr, String preis) {
+	private void refreshStatusLabels(int rundenNr, int serienNr, String preis, String rundenTyp) {
 		// TODO Auto-generated method stub
 		lblRundenNr.setText("Runden Nr: " + rundenNr);
 		lblSerieNr.setText("Serien Nr: " + serienNr);
 		lblPreis.setText("Preis: " + preis);
+		lblRundentyp.setText("Rundentyp: " + rundenTyp);
 	}
 
 	private void refreshView() {
 		rundenNr = serienliste.get(countCurrentSerie).getRundeNr();
 		serienNr = serienliste.get(countCurrentSerie).getSerieNr();
 		preis = serienliste.get(countCurrentSerie).getPreis();
-		refreshStatusLabels(rundenNr, serienNr, preis);
-		// Labels clear
-		txtGetrillteeZahl.setText("");
-		lblGewinner.setText("Gewinner:");
-		txtManuellGewinner.setText("");
-		anzVersuche = 0;
-		lblAnzVersuche.setText("Anz. Versuche: 0");
-		btnZahlBestaetigen.setDisable(false);
-		txtManuellGewinner.setDisable(false);
-		cboxManuell.setDisable(false);
-		cboxManuell.selectedProperty().set(false);
+		rundenTyp = serienliste.get(countCurrentSerie).getRundentyp();
+		if(rundenTyp.equals("Saalrunde")){
+			System.out.println("in");
+			txtGetrillteeZahl.setDisable(true);
+			btnZahlBestaetigen.setDisable(true);
+			txtManuellGewinner.setDisable(false);
+			cboxManuell.selectedProperty().set(true);
+			cboxManuell.setDisable(false);
+			txtManuellGewinner.setText("");
+			anzVersuche = 0;
+			lblGewinner.setText("Gewinner:");
+			lblAnzVersuche.setText("Anz. Versuche: 0");
+			refreshStatusLabels(rundenNr, serienNr, preis, rundenTyp);
+		}
+		else{
+			refreshStatusLabels(rundenNr, serienNr, preis, rundenTyp);
+			// Labels clear
+			txtGetrillteeZahl.setDisable(false);
+			btnZahlBestaetigen.setDisable(false);
+			txtGetrillteeZahl.setText("");
+			lblGewinner.setText("Gewinner:");
+			txtManuellGewinner.setText("");
+			anzVersuche = 0;
+			lblAnzVersuche.setText("Anz. Versuche: 0");
+			txtManuellGewinner.setDisable(false);
+			cboxManuell.setDisable(false);
+			cboxManuell.selectedProperty().set(false);
+		}
+		
+
 	}
 
 	@FXML

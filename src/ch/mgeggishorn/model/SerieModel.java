@@ -10,13 +10,15 @@ public class SerieModel {
 	private SimpleIntegerProperty rundeNr;
 	private SimpleIntegerProperty gewinnerId;
 	private SimpleStringProperty preis;
+	private SimpleStringProperty rundenTyp;
 
 
 	
-	public SerieModel(int serieNr, int rundeNr, String preis) {
+	public SerieModel(int serieNr, int rundeNr, String preis, String rundenTyp) {
 		this.serieNr = new SimpleIntegerProperty(serieNr);
 		this.rundeNr = new SimpleIntegerProperty(rundeNr);
 		this.preis = new SimpleStringProperty(preis);
+		this.rundenTyp = new SimpleStringProperty(rundenTyp);
 	}
 	
 	
@@ -57,6 +59,15 @@ public class SerieModel {
 
 	public void setPreis(String preis) {
 		this.preis.set(preis);
+	}
+	
+	public String getRundentyp() {
+		return rundenTyp.get();
+	}
+
+
+	public void setRundentyp(String rundenTyp) {
+		this.rundenTyp.set(rundenTyp);
 	}
 
 
