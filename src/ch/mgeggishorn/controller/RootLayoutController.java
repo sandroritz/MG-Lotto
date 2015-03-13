@@ -455,7 +455,8 @@ public class RootLayoutController implements Initializable {
 			dbm.insertSpieler(neuSpieler);			
 			
 			// Detailfelder füllen
-			txtNeuId.setText(String.valueOf(neuSpieler.getId()));
+			lastSpielerId = dbm.getLastId();
+    		txtNeuId.setText(String.valueOf(++lastSpielerId)); //Id fuer neuen Spieler
 			txtNeuName.setText(neuSpieler.getName());
 			txtNeuVorname.setText(neuSpieler.getVorname());
 			txtNeuStrasse.setText(neuSpieler.getStrasse());
@@ -594,7 +595,6 @@ public class RootLayoutController implements Initializable {
         txtStrasse.setText("");
         txtPlz.setText("");
         txtOrt.setText("");
-        txtNeuId.setText("");
         txtNeuName.setText("");
         txtNeuVorname.setText("");
         txtNeuStrasse.setText("");
