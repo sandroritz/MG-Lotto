@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -173,7 +174,7 @@ public class SpielenController implements Initializable {
 		Stage stage = new Stage();
 		stage.getIcons().add(new Image("/mg-logo.jpg"));
 		Parent root = FXMLLoader.load(getClass().getResource(
-				"../view/RootLayoutView.fxml"));
+				"/ch/mgeggishorn/view/RootLayoutView.fxml"));
 
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
@@ -201,7 +202,7 @@ public class SpielenController implements Initializable {
 		Stage stage = new Stage();
 		stage.getIcons().add(new Image("/mg-logo.jpg"));
 		Parent root = FXMLLoader.load(getClass().getResource(
-				"../view/RemoveSpieler.fxml"));
+				"/ch/mgeggishorn/view/RemoveSpieler.fxml"));
 		stage.initModality(Modality.WINDOW_MODAL);
 		stage.initOwner(btnZahlBestaetigen.getScene().getWindow());
 
@@ -284,6 +285,7 @@ public class SpielenController implements Initializable {
 	}
 
 	
+	@SuppressWarnings("deprecation")
 	private static String FILE = "c:/temp/mglotto_gewinnerliste_"
 			+ String.valueOf(new Date().getYear() + 1900) + ".pdf";
 	private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
@@ -310,6 +312,7 @@ public class SpielenController implements Initializable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private static void addMetaData(Document document) {
 
 		document.addTitle("MG Eggishorn - Lotto");

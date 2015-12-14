@@ -275,11 +275,11 @@ public class RootLayoutController implements Initializable {
 	                  
 	                  //Detailfelder füllen
 	                  txtId.setText(String.valueOf(selectedSpieler.get(0).getId()));
-	                  txtName.setText(selectedSpieler.get(0).getName());
-	                  txtVorname.setText(selectedSpieler.get(0).getVorname());
-	                  txtStrasse.setText(selectedSpieler.get(0).getStrasse());
-	                  txtPlz.setText(String.valueOf(selectedSpieler.get(0).getPlz()));
-	                  txtOrt.setText(selectedSpieler.get(0).getOrt());
+	                  txtName.setText(selectedSpieler.get(0).getName().trim());
+	                  txtVorname.setText(selectedSpieler.get(0).getVorname().trim());
+	                  txtStrasse.setText(selectedSpieler.get(0).getStrasse().trim());
+	                  txtPlz.setText(String.valueOf(selectedSpieler.get(0).getPlz()).trim());
+	                  txtOrt.setText(selectedSpieler.get(0).getOrt().trim());
                   
                     
                 } else {
@@ -349,7 +349,7 @@ public class RootLayoutController implements Initializable {
 		});
 		
 		rundeWaehlenCombo.valueProperty().addListener(new ChangeListener<String>() {
-	        @Override public void changed(ObservableValue ov, String t, String selected) {
+	        @Override public void changed(ObservableValue<? extends String> ov, String t, String selected) {
 		              serieWaehlen2Combo.getItems().clear();
 	              DBManager dbm = new DBManager();
 		          	try{
@@ -364,7 +364,7 @@ public class RootLayoutController implements Initializable {
 	          }    
 	      });
 		 rundeWaehlen4Combo.valueProperty().addListener(new ChangeListener<String>() {
-	        @Override public void changed(ObservableValue ov, String t, String selected) {
+	        @Override public void changed(ObservableValue<? extends String> ov, String t, String selected) {
 	              serieWaehlenCombo.getItems().clear();
 	              DBManager dbm = new DBManager();
 		          	try{
@@ -379,7 +379,7 @@ public class RootLayoutController implements Initializable {
 	          }    
 	      });
 		 preisWaehlen2Combo.valueProperty().addListener(new ChangeListener<String>() {
-		        @Override public void changed(ObservableValue ov, String t, String selectedPreis) {
+		        @Override public void changed(ObservableValue<? extends String> ov, String t, String selectedPreis) {
 		              txtPreisBearbeiten.setText(selectedPreis);     	
 		        }
 		      });
@@ -398,7 +398,7 @@ public class RootLayoutController implements Initializable {
 	private void speichern() {
 		if(disable ==false){
 			DBManager dbm = new DBManager();
-			SpielerModel spieler = new SpielerModel(Integer.parseInt(txtId.getText()), txtName.getText(), txtVorname.getText(), txtStrasse.getText(), Integer.parseInt(txtPlz.getText()), txtOrt.getText());
+			SpielerModel spieler = new SpielerModel(Integer.parseInt(txtId.getText().trim()), txtName.getText().trim(), txtVorname.getText().trim(), txtStrasse.getText().trim(), Integer.parseInt(txtPlz.getText().trim()), txtOrt.getText().trim());
 		
 				try{
 	    		dbm.updateSpieler(spieler);
@@ -447,9 +447,9 @@ public class RootLayoutController implements Initializable {
 	private void neuSpeichern() {
 		DBManager dbm = new DBManager();
 		SpielerModel neuSpieler = new SpielerModel(Integer.parseInt(txtNeuId
-				.getText()), txtNeuName.getText(), txtNeuVorname.getText(),
-				txtNeuStrasse.getText(), Integer.parseInt(txtNeuPlz.getText()),
-				txtNeuOrt.getText());
+				.getText()), txtNeuName.getText().trim(), txtNeuVorname.getText().trim(),
+				txtNeuStrasse.getText().trim(), Integer.parseInt(txtNeuPlz.getText().trim()),
+				txtNeuOrt.getText().trim());
 
 		try {
 			dbm.insertSpieler(neuSpieler);			
@@ -513,7 +513,7 @@ public class RootLayoutController implements Initializable {
 		Stage stage = new Stage(); 
 		stage.getIcons().add(new Image("/mg-logo.jpg"));
 		Parent root = FXMLLoader.load(getClass().getResource(
-				"../view/SpielenView.fxml"));
+				"/ch/mgeggishorn/view/SpielenView.fxml"));
 		
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
@@ -832,6 +832,7 @@ public class RootLayoutController implements Initializable {
 	}
 	
 	//Logger
+	@SuppressWarnings("unused")
 	private void startLogger() {
 		// TODO Auto-generated method stub
 		
@@ -868,8 +869,8 @@ public class RootLayoutController implements Initializable {
 		logStage.setScene(scene);
 		logStage.getIcons().add(new Image("/mg-logo.jpg"));
 		logStage.setTitle("Lotto - Log");
-//		logStage.setX(0);
-//		logStage.setY(0);
+		logStage.setX(0);
+		logStage.setY(0);
 		logStage.show();
 	}
 	

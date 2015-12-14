@@ -1,7 +1,5 @@
 package ch.mgeggishorn.model;
 
-import java.util.List;
-
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
