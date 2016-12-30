@@ -1,6 +1,7 @@
 package ch.mgeggishorn.controller;
 
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.opencsv.CSVWriter;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -32,6 +34,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ch.mgeggishorn.model.CurrentSpielerModel;
 import ch.mgeggishorn.model.SerieModel;
 
 public class SpielenController implements Initializable {
@@ -283,6 +286,13 @@ public class SpielenController implements Initializable {
 	private void gewinnerExportieren() {
 		generatePDF();
 	}
+	
+	@FXML
+	private void nichtGewinnerExportieren() {
+		System.out.println("Nicht Gewinner exportieren");
+		genNichtGewinnerCSV();
+		
+	}
 
 	
 	@SuppressWarnings("deprecation")
@@ -296,6 +306,49 @@ public class SpielenController implements Initializable {
 			Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
 			Font.BOLD);
+	
+	private void genNichtGewinnerCSV(){
+		
+		List<String> nichtGewinner = null;
+		
+		DBManager dbm = new DBManager();
+		try {
+			if (!dbm.getNichtGewinner().isEmpty()) {
+				nichtGewinner = dbm.getNichtGewinner();
+			} else {
+				System.out.println("Fehler Nichtgewinner Abfrage");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String csv = "C:\\TEMP\\nicht_gewinner_liste.csv";
+		CSVWriter writer = null;
+		try {
+			writer = new CSVWriter(new FileWriter(csv));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		String [] record =null;
+		writer.writeNext(("Name,Vorname,Adresse,PLZ,Ort").split(","));
+		for( int i = 0; i < nichtGewinner.size(); i++){
+			record = nichtGewinner.get(i).split(",");
+			//Write the record to file
+		     writer.writeNext(record);
+		}
+	
+		 
+	      
+		 
+		try {
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private void generatePDF() {
 		// PDF Generator

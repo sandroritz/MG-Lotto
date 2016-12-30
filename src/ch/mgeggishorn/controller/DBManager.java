@@ -473,6 +473,7 @@ public class DBManager {
 			e.printStackTrace();
 			System.out.println("Error on Building Data");
 		}
+		
 		return rundentypen;
 	}
 
@@ -1085,5 +1086,36 @@ public class DBManager {
 		}
 	
 		return siegerlist;
+	}
+	
+	public List<String> getNichtGewinner() {
+		// TODO Auto-generated method stub
+		List<String> nichtGewinnerList = new ArrayList<String>();
+		String nichtGewinner="";
+		try {
+			con = DBConnector.getConnected();
+			Statement s = con.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("select * from currentSpieler as c left join  serie as s on c.fkSpieler = s.sieger "
+					+ "where s.sieger is null group by c.name,c. vorname, c.strasse, c.plz, c.ort");
+			if (rs != null) {
+				while (rs.next()) {
+					String name = rs.getString("name");
+					String vorname = rs.getString("vorname");
+					String strasse = rs.getString("strasse");
+					int plz = rs.getInt("plz");
+					String ort = rs.getString("ort");
+					
+					nichtGewinner = name +"," + vorname + "," + strasse + "," + plz + "," + ort;		
+					nichtGewinnerList.add(nichtGewinner);
+				}
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error on Building Data");
+		}
+	
+		return nichtGewinnerList;
 	}
 }

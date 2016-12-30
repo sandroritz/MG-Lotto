@@ -168,9 +168,9 @@
    									<ToggleGroup fx:id="radioKarten" />
    								</toggleGroup>
    							</RadioButton>
-   							<RadioButton id="3" fx:id="radiokarte3" layoutX="143.0" layoutY="99.0" text="3 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="1" />
-   							<RadioButton id="8" fx:id="radiokarte8" layoutX="143.0" layoutY="135.0" text="8 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="2" />
-   							<RadioButton id="20" fx:id="radiokarte20" layoutX="143.0" layoutY="135.0" text="20 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="3" />
+   							<RadioButton id="2" fx:id="radiokarte3" layoutX="143.0" layoutY="99.0" text="2 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="1" />
+   							<RadioButton id="3" fx:id="radiokarte8" layoutX="143.0" layoutY="135.0" text="3 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="2" />
+   							<RadioButton id="8" fx:id="radiokarte20" layoutX="143.0" layoutY="135.0" text="8 Karten" toggleGroup="$radioKarten" GridPane.rowIndex="3" />
                               <Button mnemonicParsing="false" onAction="#addCurrentSpieler" prefHeight="25.0" prefWidth="80.0" text="&gt;&gt;" GridPane.rowIndex="5" />
                               <Button mnemonicParsing="false" onAction="#deleteCurrentSpieler" prefHeight="25.0" prefWidth="80.0" text="&lt;&lt;" GridPane.rowIndex="6" />
                            </children>

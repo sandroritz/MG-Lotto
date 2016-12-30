@@ -54,6 +54,7 @@ public class Zahlenreihe {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		 
 		List<String[]> csvdata = new ArrayList<String[]>();
 		for( int i = 0; i < maxSaalZahl; i++){
@@ -67,12 +68,7 @@ public class Zahlenreihe {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		 
-		
 
-		
 		//Ende
 		
 		return saalNumberList;
@@ -108,12 +104,7 @@ public class Zahlenreihe {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		 
-		
 
-		
 		//Ende
 		return pcNumberList;
 	}
